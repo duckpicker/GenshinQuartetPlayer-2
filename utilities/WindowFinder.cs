@@ -35,20 +35,9 @@ namespace GenshinQuartetPlayer2
             IntPtr thisWindow = GetForegroundWindow();
             return GenshinImpactWindow == thisWindow;
         }
-
         public static void MinimizeWindow()
         {
             ShowWindow(GenshinImpactWindow, SW_MINIMIZE);
-        }
-
-        public static void Test()
-        {
-            Process[] genshinImpact = Process.GetProcessesByName("GenshinImpact");
-            Process h = genshinImpact.FirstOrDefault();
-            Console.WriteLine(genshinImpact.Length);
-            foreach (var proc in genshinImpact) Console.WriteLine(proc.MainWindowHandle);
-            if (WindowStatus() != true) Console.WriteLine("Window Iconic");
-            else Console.WriteLine("Window Active");
         }
 
         [DllImport("User32.dll")]

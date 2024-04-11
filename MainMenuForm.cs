@@ -45,7 +45,7 @@ namespace GenshinQuartetPlayer2
         {
             if (playlist.SelectedIndex != -1 && !File.Exists(_database.GetAllEntries().GetAwaiter().GetResult()[playlist.SelectedIndex].FilePath))
             {
-                _database.DeleteEntryAsync((int)_database.GetAllEntries().GetAwaiter().GetResult()[playlist.SelectedIndex].ID);
+                _database.DeleteEntryAsync((int)_database.GetAllEntries().GetAwaiter().GetResult()[playlist.SelectedIndex].Id);
                 UpdatePlaylist();
                 FormUpdate();
             }
@@ -68,14 +68,14 @@ namespace GenshinQuartetPlayer2
 
         private void instrumentComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings._instrument = (Instrument)instrumentComboBox.SelectedIndex;
+            Settings.Instrument = (Instrument)instrumentComboBox.SelectedIndex;
             UpdateBestTransposition();
-            Console.WriteLine(Settings._transposition);
+            Console.WriteLine(Settings.Transposition);
         }
 
         private void transposition_ValueChanged(object sender, EventArgs e)
         {
-            Settings._transposition = (int)transposition.Value;
+            Settings.Transposition = (int)transposition.Value;
         }
 
         private void trackListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -86,7 +86,7 @@ namespace GenshinQuartetPlayer2
         private void UpdateTrackListBox()
         {
             trackListBox.Items.Clear();
-            foreach (var chunk in _midiReader._trackChunks)
+            foreach (var chunk in _midiReader.TrackChunks)
             {
                 trackListBox.Items.Add($"Event: {chunk.Events.Count} | {Convert.ToString(chunk.Events.ElementAt(0)).Replace("Sequence/Track Name ", "")}", true);
             }
@@ -131,7 +131,7 @@ namespace GenshinQuartetPlayer2
             if (playlist.Items.Count > 0 && playlist.SelectedIndex != -1)
             {
                 int nextIndex = playlist.SelectedIndex - 1 > 0 && playlist.SelectedIndex < playlist.Items.Count - 2 ? playlist.SelectedIndex - 1 : 0;
-                _database.DeleteEntryAsync((int)_database.GetAllEntries().GetAwaiter().GetResult()[playlist.SelectedIndex].ID);
+                _database.DeleteEntryAsync((int)_database.GetAllEntries().GetAwaiter().GetResult()[playlist.SelectedIndex].Id);
                 UpdatePlaylist();
                 if (playlist.Items.Count > 0) playlist.SelectedIndex = nextIndex;
             }
@@ -154,20 +154,20 @@ namespace GenshinQuartetPlayer2
             KeyboardEmulator keyboardEmulator = new KeyboardEmulator();
             var transpositionList = keyboardEmulator.GetBestTranspostion(_midiReader);
             TranspostitionEntry closest = new TranspostitionEntry(0, 0, 0);
-            int maxNotes = transpositionList.ElementAt(0)._maxNotes;
+            int maxNotes = transpositionList.ElementAt(0).MaxNotes;
             int minimum = int.MinValue;
             for (int i = 0; i < transpositionList.Count(); i++)
             {
-                if (transpositionList.ElementAt(i)._transpositionResult > minimum)
+                if (transpositionList.ElementAt(i).TranspositionResult > minimum)
                 {
-                    minimum = transpositionList.ElementAt(i)._transpositionResult;
+                    minimum = transpositionList.ElementAt(i).TranspositionResult;
                     closest = transpositionList.ElementAt(i);
                 }
             }
-            transpositionLabel.Text = $"{closest._i}/{closest._i + 12}: {closest._transpositionResult} ({closest._maxNotes})";
-            int bestTransposition = closest._i > -5 ? closest._i : closest._i + 12;
+            transpositionLabel.Text = $"{closest.Value}/{closest.Value + 12}: {closest.TranspositionResult} ({closest.MaxNotes})";
+            int bestTransposition = closest.Value > -5 ? closest.Value : closest.Value + 12;
             transposition.Value = bestTransposition;
-            return closest._i;
+            return closest.Value;
         }
 
         private void inputDeviceComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -190,7 +190,7 @@ namespace GenshinQuartetPlayer2
 
         private void playTrackBar_Scroll(object sender, EventArgs e)
         {
-            _currentTime = TimeSpan.FromMilliseconds((_midiReader._totalTime.TotalMilliseconds * playTrackBar.Value) / 100);
+            _currentTime = TimeSpan.FromMilliseconds((_midiReader.TotalTime.TotalMilliseconds * playTrackBar.Value) / 100);
             UpdateTimeLabel();
         }
 
@@ -201,21 +201,20 @@ namespace GenshinQuartetPlayer2
             {
                 playTrackBar.Invoke(() =>
                 {
-                    playTrackBar.Value = (((int)timeSpan.TotalMilliseconds) * 100) / ((int)_midiReader._totalTime.TotalMilliseconds);
+                    playTrackBar.Value = (((int)timeSpan.TotalMilliseconds) * 100) / ((int)_midiReader.TotalTime.TotalMilliseconds);
                     UpdateTimeLabel();
                 });
             }
             else
             {
-                playTrackBar.Value = (((int)timeSpan.TotalMilliseconds) * 100) / ((int)_midiReader._totalTime.TotalMilliseconds);
+                playTrackBar.Value = (((int)timeSpan.TotalMilliseconds) * 100) / ((int)_midiReader.TotalTime.TotalMilliseconds);
                 UpdateTimeLabel();
             }
         }
 
         private void UpdateTimeLabel()
         {
-            //timeLabel.Text = $"{_currentTime.Minutes}:{_currentTime.Seconds}/{_midiReader._totalTime.Minutes}:{_midiReader._totalTime.Seconds}";
-            timeLabel.Text = _currentTime.ToString(@"mm\:ss") + "/" + _midiReader._totalTime.ToString(@"mm\:ss");
+            timeLabel.Text = _currentTime.ToString(@"mm\:ss") + "/" + _midiReader.TotalTime.ToString(@"mm\:ss");
         }
 
         private void stopButton_Click(object sender, EventArgs e)
@@ -227,7 +226,7 @@ namespace GenshinQuartetPlayer2
 
         private void speedNumeric_ValueChanged(object sender, EventArgs e)
         {
-            Settings._speed = speedNumeric.Value;
+            Settings.Speed = speedNumeric.Value;
         }
     }
 }

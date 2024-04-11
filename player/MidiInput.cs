@@ -30,7 +30,7 @@ namespace GenshinQuartetPlayer2
             catch { }
         }
 
-        static void MidiIn_MessageReceived(object sender, MidiInMessageEventArgs e)
+        static void MidiIn_MessageReceived(object? sender, MidiInMessageEventArgs e)
         {
             try
             {

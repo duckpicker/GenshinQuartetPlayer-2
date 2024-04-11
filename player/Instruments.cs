@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsInput.Native;
 
 namespace GenshinQuartetPlayer2
 {
-    class PlaylistEntry
+    public enum Instrument
     {
-        public int? Id { get; set; }
-        public string Name { get; set; }
-        public string FilePath { get; set; }
+        LyreZither = 0,
+        OldLyre = 1,
+        Drum = 2,
+        Waldhorn = 3
     }
 }

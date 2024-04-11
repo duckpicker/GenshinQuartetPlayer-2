@@ -21,15 +21,15 @@ namespace GenshinQuartetPlayer2
         }
         public int Transpose(int note)
         {
-            note += Settings._transposition;
-            if (Settings._instrument != Instrument.Drum)
+            note += Settings.Transposition;
+            if (Settings.Instrument != Instrument.Drum)
             {
                 if (note < _leftBottomNoteNumber)
                 {
                     while (note <= _leftBottomNoteNumber) note += _octave;
                     return note;
                 }
-                switch (Settings._instrument)
+                switch (Settings.Instrument)
                 {
                     case Instrument.Waldhorn:
                         {
@@ -41,7 +41,7 @@ namespace GenshinQuartetPlayer2
                             while (note > _rightTopOldLyreNoteNumber) note -= _octave;
                             return note;
                         }
-                    case Instrument.Lyre_Zither:
+                    case Instrument.LyreZither:
                         {
                             while (note > _rightTopLyreNoteNumber) note -= _octave;
                             return note;
