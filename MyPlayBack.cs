@@ -34,7 +34,7 @@ namespace GenshinQuartetPlayer2
 
 
             if (metadata == null) return false;
-            if (_midiReader._mutedTrackChunks.Contains((int)metadata)) return false;
+            if (_midiReader.MutedTrackChunks.Contains((int)metadata)) return false;
 
             _keyboardEmulator.Emulator(midiEvent);
             return true;
