@@ -9,10 +9,10 @@ namespace GenshinQuartetPlayer2
     class Transposition
     {
 
-        private int _leftBottomNoteNumber = 48;
-        private int _rightTopLyreNoteNumber = 83;
-        private int _rightTopOldLyreNoteNumber = 82;
-        private int _rightTopWarldhownTopNoteNumber = 71;
+        private const int _leftBottomNoteNumber = 48;
+        private const int _rightTopLyreNoteNumber = 83;
+        private const int _rightTopOldLyreNoteNumber = 82;
+        private const int _rightTopWarldhownTopNoteNumber = 71;
         private const int _octave = 12;
 
         public Transposition()

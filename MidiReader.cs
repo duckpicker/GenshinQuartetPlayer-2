@@ -17,7 +17,8 @@ namespace GenshinQuartetPlayer2
         public MidiFile _midiFile { get; private set; }
         public IEnumerable<TrackChunk> _trackChunks { get; private set; }
         public TimeSpan _totalTime { get; private set; }
-        public List<int> _mutedTrackChunks { get; set; }
+
+        public HashSet<int> MutedTrackChunks { get; set; }
         public MyPlayback _myPlayBack { get; private set; }
 
         public MidiReader(string file)
@@ -27,9 +28,7 @@ namespace GenshinQuartetPlayer2
             _timedEvents = _midiFile.GetTrackChunks().SelectMany((c, i) => c.GetTimedEvents().Select(e => new MidiPlay(e.Event, e.Time, i))).OrderBy(e => e.Time);
             _tempoMap = _midiFile.GetTempoMap();
             _trackChunks = _midiFile.GetTrackChunks();
-            _mutedTrackChunks = new List<int>();
-            for (int i = 0; i < _trackChunks.Count(); i++) _mutedTrackChunks.Add(_trackChunks.Count());
-            for (int i = 0; i < _trackChunks.Count(); i++) _mutedTrackChunks[i] = _trackChunks.Count();
+            MutedTrackChunks = new HashSet<int>();
             _totalTime = _midiFile.GetTimedEvents().LastOrDefault().TimeAs<MetricTimeSpan>(_tempoMap);
             _myPlayBack = new MyPlayback(_timedEvents, _tempoMap, this);
         }
@@ -48,10 +47,10 @@ namespace GenshinQuartetPlayer2
             _myPlayBack.MoveToTime(metricTimeSpan);
         }
 
-        public void SwitchTraks(int id)
+        public void SwitchTraks(int trackNumber)
         {
-            if (_mutedTrackChunks.Contains(id)) _mutedTrackChunks[id] = _trackChunks.Count();
-            else _mutedTrackChunks[id] = id;
+            if (MutedTrackChunks.Contains(trackNumber)) MutedTrackChunks.Remove(trackNumber);
+            else MutedTrackChunks.Add(trackNumber);
         }
     }
 }
