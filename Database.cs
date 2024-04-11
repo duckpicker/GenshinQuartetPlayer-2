@@ -57,10 +57,12 @@ namespace GenshinQuartetPlayer2
             List<PlaylistEntry> entries = new List<PlaylistEntry>();
             while (reader.Read())
             {
-                PlaylistEntry entry = new PlaylistEntry();
-                entry.ID = reader.GetInt32(0);
-                entry.Name = reader.GetString(1);
-                entry.FilePath = reader.GetString(2);
+                PlaylistEntry entry = new PlaylistEntry()
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    FilePath = reader.GetString(2),
+                };
                 entries.Add(entry);
             }
             return entries;
