@@ -13,7 +13,6 @@ namespace GenshinQuartetPlayer2
     class MyPlayback : Playback
     {
         public delegate void OnGameUnfocus(object sender, TimeSpan timeSpan);
-
         public static event OnGameUnfocus ON_GAME_UNFOCUS;
 
         KeyboardEmulator _keyboardEmulator = new KeyboardEmulator();

@@ -6,11 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GenshinQuartetPlayer2.online.requests;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace GenshinQuartetPlayer2
 {
-    class MidiReader
+    class MidiReader : BaseRequest
     {
         private IEnumerable<MidiPlay> timedEvents { get; set; }
         private TempoMap tempoMap { get; set; }

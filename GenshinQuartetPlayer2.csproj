@@ -12,7 +12,9 @@
     <PackageReference Include="InputSimulator" Version="1.0.4" />
     <PackageReference Include="Melanchall.DryWetMidi" Version="7.0.2" />
     <PackageReference Include="NAudio.Midi" Version="2.2.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+    <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
   </ItemGroup>
 
 </Project>
