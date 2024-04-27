@@ -11,7 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace GenshinQuartetPlayer2
 {
-    class MidiReader : BaseRequest
+    class MidiReader
     {
         private IEnumerable<MidiPlay> timedEvents { get; set; }
         private TempoMap tempoMap { get; set; }
@@ -48,7 +48,7 @@ namespace GenshinQuartetPlayer2
             myPlayBack.MoveToTime(metricTimeSpan);
         }
 
-        public void SwitchTraks(int trackNumber)
+        public void SwitchTracks(int trackNumber)
         {
             if (MutedTrackChunks.Contains(trackNumber)) MutedTrackChunks.Remove(trackNumber);
             else MutedTrackChunks.Add(trackNumber);

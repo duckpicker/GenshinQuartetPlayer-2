@@ -13,6 +13,5 @@ namespace GenshinQuartetPlayer2
         public static readonly int TrimDurationTime = 24;
         public static decimal Speed = 1.0m;
         public static int port = 8080;
-        public static MidiReader CurrentMidiFile;
     }
 }

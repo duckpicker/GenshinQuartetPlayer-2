@@ -6,9 +6,11 @@ public class QuartetServer
 {
     private static QuartetServer _instance;
 
-    public static QuartetServer Instance { 
-        get {
-            if ( _instance == null ) _instance = new QuartetServer();
+    public static QuartetServer Instance
+    {
+        get
+        {
+            if (_instance == null) _instance = new QuartetServer();
             return _instance;
         }
     }
