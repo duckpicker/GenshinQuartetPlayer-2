@@ -53,5 +53,10 @@ namespace GenshinQuartetPlayer2
             if (MutedTrackChunks.Contains(trackNumber)) MutedTrackChunks.Remove(trackNumber);
             else MutedTrackChunks.Add(trackNumber);
         }
+
+        public void ResetTracks()
+        {
+            MutedTrackChunks?.Clear();
+        }
     }
 }

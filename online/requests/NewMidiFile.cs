@@ -4,6 +4,8 @@ public class NewMidiFile : BaseRequest
 {
     public byte[] FileBytes { get; set; }
 
+    public string SessionId { get; set; }
+
     public NewMidiFile()
     {
 

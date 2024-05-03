@@ -112,7 +112,7 @@ namespace GenshinQuartetPlayer2
                 UpdatePlaylist();
                 if (openFileDialog.FileNames.Length == 1)
                 {
-                    playlist.SelectedIndex = playlist.Items.Count - 1 - openFileDialog.FileNames.Length;
+                    playlist.SelectedIndex = playlist.Items.Count - openFileDialog.FileNames.Length;
                 }
                 else if (playlist.Items.Count != 0) playlist.SelectedIndex = 0;
             }

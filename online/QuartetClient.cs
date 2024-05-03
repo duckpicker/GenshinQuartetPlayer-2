@@ -22,44 +22,109 @@ namespace GenshinQuartetPlayer2.online.requests
             }
         }
 
+        // INVOKE TO FORM ----------------------------------
+        // new midi file invoke
         public delegate void OnNewMidiFile(string newMidiFilePath);
 
         public static event OnNewMidiFile ON_NEW_MIDI_FILE;
 
+        // get client settings invoke
+        public delegate ClientNewSettingsEntry OnClientSettings();
 
-        private ClientEntry _client;
-        private WebSocket _webSocketClient;
+        public static event OnClientSettings ON_CLIENT_SETTINGS;
+
+        // set new settings invoke
+        public delegate void ClientSetNewSettings(ClientNewSettingsEntry entry);
+
+        public static event ClientSetNewSettings ON_NEW_SETTINGS;
+
+
+        public ClientEntry Client { get; private set; }
+        public WebSocket WebSocketClient { get; private set; }
 
         public void CreateClient(string username, int offset, string ipaddress, int port)
         {
-            _client = new ClientEntry(-1, username, offset);
-            _webSocketClient = new WebSocket($"ws://{ipaddress}:{port}/QuartetService");
+            Client = new ClientEntry(-1, username, offset);
+            WebSocketClient = new WebSocket($"ws://{ipaddress}:{port}/QuartetService");
 
-            _webSocketClient.OnMessage += ClientOnMessage;
+            WebSocketClient.OnMessage += ClientOnMessage;
         }
 
-        private static void ClientOnMessage(object sender, MessageEventArgs e)
+        private void ClientOnMessage(object sender, MessageEventArgs e)
         {
-            Console.WriteLine(e.Data);
-
             BaseRequest? jsonBaseRequest = JsonConvert.DeserializeObject<BaseRequest>(e.Data);
 
             // new midi file
             if (typeof(NewMidiFile).FullName == jsonBaseRequest.RequestType)
             {
-                
                 NewMidiFile newMidiFile = JsonConvert.DeserializeObject<NewMidiFile>(e.Data);
                 File.WriteAllBytes(Path.Combine(Path.GetTempPath(), "temp.mid"), newMidiFile.FileBytes);
                 string path = $"{Path.GetTempPath()}\\temp.mid";
                 ON_NEW_MIDI_FILE.Invoke(path);
+                if (Client.SessionID == "") Client.SessionID = newMidiFile.SessionId;
+                WebSocketClient.Send(JsonConvert.SerializeObject(new ConnectionConfirm(DateTime.Now)));
+            }
+
+            // connection ping
+            if (typeof(ConnectionConfirm).FullName == jsonBaseRequest.RequestType)
+            {
+                ConnectionConfirm? connection = JsonConvert.DeserializeObject<ConnectionConfirm>(e.Data);
+                Console.WriteLine(connection.Ping);
+                if (connection.PingCount == 4)
+                {
+                    Console.WriteLine(Client.Ping);
+                    Client.Ping += connection.Ping / 4 / 2;
+                    Console.WriteLine(Client.Ping);
+                }
+                else
+                {
+                    connection.NowDateTime = DateTime.Now;
+                    WebSocketClient.Send(JsonConvert.SerializeObject(connection));
+                }
+
+            }
+
+            // new max ping
+            if (typeof(LobbyMaxPing).FullName == jsonBaseRequest.RequestType)
+            {
+                LobbyMaxPing? maxPing = JsonConvert.DeserializeObject<LobbyMaxPing>(e.Data);
+                Client.MaxPing = maxPing.MaxPing;
+            }
+
+            // get client settings
+            if (typeof(GetClientSettings).FullName == jsonBaseRequest.RequestType)
+            {
+                ClientNewSettingsEntry? settingsEntry = ON_CLIENT_SETTINGS?.Invoke();
+                string json = JsonConvert.SerializeObject(settingsEntry);
+                WebSocketClient.Send(json);
+            }
+
+            // set client settings
+            if (typeof(ClientNewSettingsEntry).FullName == jsonBaseRequest.RequestType)
+            {
+                ClientNewSettingsEntry? settingsEntry = JsonConvert.DeserializeObject<ClientNewSettingsEntry>(e.Data);
+                ON_NEW_SETTINGS?.Invoke(settingsEntry);
+            }
+
+            // disconnect
+            if (typeof(DisconnectClient).FullName == jsonBaseRequest.RequestType)
+            {
+                Disconnect();
             }
         }
 
         public void CreateConnection()
         {
-            _webSocketClient.Connect();
-            string json = JsonConvert.SerializeObject(_client);
-            _webSocketClient.Send(json);
+            WebSocketClient.Connect();
+            string json = JsonConvert.SerializeObject(Client);
+            WebSocketClient.Send(json);
+        }
+
+        public void Disconnect()
+        {
+            string json = JsonConvert.SerializeObject(new DisconnectClient() { SessionId = Client.SessionID });
+            WebSocketClient.Send(json);
+            WebSocketClient.Close();
         }
     }
 }

@@ -8,9 +8,19 @@ namespace GenshinQuartetPlayer2.online;
 
 public class QuartetService : WebSocketBehavior
 {
-    public delegate string? NewClient(object sender);
-    public static event NewClient NEW_CLIENT;
+    // INVOKE TO FORM ----------------------------------
+    // update clients
+    public delegate string? UpdateClients(object sender);
+    public static event UpdateClients UPDATE_CLIENTS;
 
+    // get client settings
+    public delegate void GetClientSettings(ClientNewSettingsEntry settings);
+    public static event GetClientSettings GET_CLIENT_SETTINGS;
+
+
+
+    // INVOKE FROM FORM ----------------------------------
+    // broadcast message
     public static event Action<string> ON_BROADCAST_MESSAGE;
 
     public static void TriggerBroadcast(string message)
@@ -18,11 +28,6 @@ public class QuartetService : WebSocketBehavior
         ON_BROADCAST_MESSAGE?.Invoke(message);
     }
 
-    public QuartetService()
-    {
-        ON_BROADCAST_MESSAGE += BroadcastMessage;
-        //HostForm.ON_BROADCAST_MESSAGE += (message) => BroadcastMessage(message); // броадкаст сломал нахуй все починить надо
-    }
     private void BroadcastMessage(string message)
     {
         if (Sessions != null && Sessions.IDs.Count() > 0)
@@ -33,6 +38,27 @@ public class QuartetService : WebSocketBehavior
             }
         }
     }
+
+    
+    // private message
+    public static event Action<string, string> ON_PRIVATE_MESSAGE;
+
+    public static void TriggerPrivateMessage(string session, string message)
+    {
+        ON_PRIVATE_MESSAGE?.Invoke(session, message);
+    }
+
+    private void PrivateMessage(string session, string message)
+    {
+        Sessions.SendTo(message, session);
+    }
+
+    public QuartetService()
+    {
+        ON_BROADCAST_MESSAGE += BroadcastMessage;
+        ON_PRIVATE_MESSAGE += PrivateMessage;
+    }
+    
 
 
     protected override void OnMessage(MessageEventArgs e)
@@ -53,18 +79,69 @@ public class QuartetService : WebSocketBehavior
 
                 QuartetServer.Instance.ClientEntries.Add(clientEntry);
 
-                string? midiFile = NEW_CLIENT?.Invoke(this);
+                string? midiFile = UPDATE_CLIENTS?.Invoke(this);
                 NewMidiFile newMidiFile = new NewMidiFile();
                 newMidiFile.ReadFile(midiFile);
+                newMidiFile.SessionId = Sessions.IDs.Last();
                 string json = JsonConvert.SerializeObject(newMidiFile);
 
+                SendMaxPing();
+
                 Send(json);
+            }
+
+            // ready new state
+            if (typeof(ReadyState).FullName == baseRequest?.RequestType)
+            {
+                Console.WriteLine(typeof(ReadyState).FullName);
+
+                ReadyState? readyState = JsonConvert.DeserializeObject<ReadyState>(e.Data);
+                var client = QuartetServer.Instance.ClientEntries.FirstOrDefault(c => c.SessionID == readyState.SessionId);
+                client.IsReady = readyState.Ready;
+                UPDATE_CLIENTS?.Invoke(this);
+            }
+
+            // client get settings
+            if (typeof(ClientNewSettingsEntry).FullName == baseRequest?.RequestType)
+            {
+                GET_CLIENT_SETTINGS?.Invoke(JsonConvert.DeserializeObject<ClientNewSettingsEntry>(e.Data));
+            }
+
+            // send ping connection confirm
+            if (typeof(ConnectionConfirm).FullName == baseRequest?.RequestType)
+            {
+                ConnectionConfirm? connection = JsonConvert.DeserializeObject<ConnectionConfirm>(e.Data);
+                TimeSpan ping = connection.NowDateTime - connection.PreviousDateTime;
+                connection.Ping += (int)ping.TotalMilliseconds;
+                connection.PreviousDateTime = connection.NowDateTime + new TimeSpan(0, 0, 1);
+                connection.PingCount++;
+
+                Thread.Sleep(1000);
+
+                string json = JsonConvert.SerializeObject(connection);
+                Send(json);
+            }
+
+            // client disconnect
+            if (typeof(DisconnectClient).FullName == baseRequest?.RequestType)
+            {
+                DisconnectClient? disconnectClient = JsonConvert.DeserializeObject<DisconnectClient>(e.Data);
+                var client = QuartetServer.Instance.ClientEntries.FirstOrDefault(c => c.SessionID == disconnectClient.SessionId);
+                QuartetServer.Instance.ClientEntries.Remove(client);
+                UPDATE_CLIENTS?.Invoke(this);
             }
         }
         catch (Exception exception)
         {
-            Console.WriteLine(exception);
+            //Console.WriteLine(exception);
+            MessageBox.Show(exception.Message);
             throw;
         }
+    }
+
+    private void SendMaxPing()
+    {
+        var maxPing = QuartetServer.Instance.ClientEntries.Max(c => c.Ping);
+        BroadcastMessage(JsonConvert.SerializeObject(new LobbyMaxPing() { MaxPing = maxPing }));
     }
 }

@@ -18,9 +18,6 @@ namespace GenshinQuartetPlayer2.winforms
 {
     public partial class HostForm : Form
     {
-        //public delegate void OnBroadcastMessage(string message);
-        //public static event OnBroadcastMessage ON_BROADCAST_MESSAGE;
-
         private string _file;
         private MidiReader _midiReader;
         private Database _database;
@@ -45,9 +42,11 @@ namespace GenshinQuartetPlayer2.winforms
 
             MyPlayback.ON_GAME_UNFOCUS += (e, d) => SetPlayTrackBarValue(d);
 
-            QuartetService.NEW_CLIENT += (e) => UpdateClients();
+            QuartetService.UPDATE_CLIENTS += (e) => UpdateClients();
 
             UpdateClients();
+
+            clientListBox.DoubleClick += (sender, e) => OpenClientEditorForm(sender, e);
         }
 
         private void read_Click(object sender, EventArgs e)
@@ -236,7 +235,8 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void readyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-
+            QuartetServer.Instance.ClientEntries.ElementAt(0).IsReady = readyCheckBox.Checked;
+            UpdateClients();
         }
 
         private void noPlayCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -261,7 +261,13 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void kickButton_Click(object sender, EventArgs e)
         {
-
+            if (clientListBox.SelectedItems != null && clientListBox.SelectedIndex != 0)
+            {
+                QuartetService.TriggerPrivateMessage(QuartetServer.Instance.ClientEntries.ElementAt(clientListBox.SelectedIndex).SessionID,
+                    JsonConvert.SerializeObject(new DisconnectClient()));
+                QuartetServer.Instance.ClientEntries.RemoveAt(clientListBox.SelectedIndex);
+                UpdateClients();
+            }
         }
 
         private void testButton_Click(object sender, EventArgs e)
@@ -278,15 +284,34 @@ namespace GenshinQuartetPlayer2.winforms
                 clientListBox.Invoke(() =>
                 {
                     clientListBox.Items.Clear();
-                    foreach (var client in QuartetServer.Instance.ClientEntries) clientListBox.Items.Add(client);
+                    foreach (var client in QuartetServer.Instance.ClientEntries)
+                    {
+                        string check = client.IsReady ? "✔" : "✖";
+                        clientListBox.Items.Add($"{client.Username} {check}");
+                    }
+
                 });
             }
             else
             {
                 clientListBox.Items.Clear();
-                foreach (var client in QuartetServer.Instance.ClientEntries) clientListBox.Items.Add(client);
+                foreach (var client in QuartetServer.Instance.ClientEntries)
+                {
+                    string check = client.IsReady ? "✔" : "✖";
+                    clientListBox.Items.Add($"{client.Username} {check}");
+                }
             }
             return _file;
+        }
+
+        private void OpenClientEditorForm(object sender, EventArgs e)
+        {
+            if (clientListBox.SelectedItems != null && clientListBox.SelectedIndex != 0)
+            {
+                ClientEditorForm clientEditorForm = new ClientEditorForm(QuartetServer.Instance.ClientEntries.ElementAt(clientListBox.SelectedIndex));
+                clientEditorForm.ShowDialog();
+            }
+            
         }
     }
 }

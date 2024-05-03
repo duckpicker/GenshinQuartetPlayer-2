@@ -1,5 +1,6 @@
 ﻿using GenshinQuartetPlayer2.online.requests;
 using Melanchall.DryWetMidi.Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,8 +8,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace GenshinQuartetPlayer2.winforms
 {
@@ -21,6 +24,8 @@ namespace GenshinQuartetPlayer2.winforms
             InitializeComponent();
             instrumentComboBox.SelectedIndex = 0;
             QuartetClient.ON_NEW_MIDI_FILE += (filePath) => SetNewMidiFile(filePath);
+            QuartetClient.ON_CLIENT_SETTINGS += () => CreateNewSettingsEntry();
+            QuartetClient.ON_NEW_SETTINGS += (settings) => SetNewSettings(settings);
         }
 
         private void ClientForm_Load(object sender, EventArgs e)
@@ -57,7 +62,11 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void readyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-
+            QuartetClient.Instance.WebSocketClient.Send(JsonConvert.SerializeObject(new ReadyState()
+            {
+                SessionId = QuartetClient.Instance.Client.SessionID,
+                Ready = readyCheckBox.Checked
+            }));
         }
 
         private void disconnectButton_Click(object sender, EventArgs e)
@@ -103,10 +112,45 @@ namespace GenshinQuartetPlayer2.winforms
         private void UpdateTrackListBox()
         {
             trackListBox.Items.Clear();
-            foreach (var chunk in _midiReader.TrackChunks)
+            for (int i = 0; i < _midiReader.TrackChunks.Count(); i++)
             {
-                trackListBox.Items.Add($"Event: {chunk.Events.Count} | {Convert.ToString(chunk.Events.ElementAt(0)).Replace("Sequence/Track Name ", "")}", true);
+                bool checker = !_midiReader.MutedTrackChunks.Contains(i);
+                var chunk = _midiReader.TrackChunks.ElementAt(i);
+                trackListBox.Items.Add($"Event: {chunk.Events.Count} | {Convert.ToString(chunk.Events.ElementAt(0)).Replace("Sequence/Track Name ", "")}", checker);
             }
+        }
+
+        // get set settings from host
+        private ClientNewSettingsEntry CreateNewSettingsEntry()
+        {
+            List<string> chunks = new List<string>();
+            foreach (var track in trackListBox.Items)
+            {
+                chunks.Add(track.ToString());
+            }
+            return new ClientNewSettingsEntry((int)transposition.Value, Settings.Instrument,
+                _midiReader.MutedTrackChunks, QuartetClient.Instance.Client.Ping, chunks);
+        }
+
+        private void SetNewSettings(ClientNewSettingsEntry settings)
+        {
+            if (this.InvokeRequired && settings != null)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    instrumentComboBox.SelectedIndex = (int)settings.Instrument;
+                    UpdateBestTransposition();
+                    _midiReader.MutedTrackChunks = settings.MutedTrackChunks;
+                    UpdateTrackListBox();
+                    QuartetClient.Instance.Client.Ping = settings.NewPing;
+                    transposition.Value = settings.Transposition;
+                }));
+            }
+        }
+
+        private void ClientForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuartetClient.Instance.Disconnect();
         }
     }
 }

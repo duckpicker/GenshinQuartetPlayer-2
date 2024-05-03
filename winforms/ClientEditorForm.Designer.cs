@@ -1,6 +1,6 @@
 ﻿namespace GenshinQuartetPlayer2.winforms
 {
-    partial class ClientForm
+    partial class ClientEditorForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,110 +32,108 @@
             trackListBox = new CheckedListBox();
             transposition = new NumericUpDown();
             instrumentComboBox = new ComboBox();
-            openWindow = new Button();
-            disconnectButton = new Button();
-            readyCheckBox = new CheckBox();
+            saveButton = new Button();
+            pingUpDown = new NumericUpDown();
+            testPingButton = new Button();
             ((System.ComponentModel.ISupportInitialize)transposition).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pingUpDown).BeginInit();
             SuspendLayout();
             // 
             // transpositionLabel
             // 
             transpositionLabel.AutoSize = true;
-            transpositionLabel.Location = new Point(121, 70);
+            transpositionLabel.Location = new Point(121, 55);
             transpositionLabel.Name = "transpositionLabel";
             transpositionLabel.Size = new Size(42, 15);
-            transpositionLabel.TabIndex = 22;
+            transpositionLabel.TabIndex = 27;
             transpositionLabel.Text = "0: 0 (0)";
             // 
             // trackListBox
             // 
             trackListBox.CheckOnClick = true;
             trackListBox.FormattingEnabled = true;
-            trackListBox.Location = new Point(12, 123);
+            trackListBox.Location = new Point(12, 108);
             trackListBox.Name = "trackListBox";
             trackListBox.Size = new Size(216, 130);
-            trackListBox.TabIndex = 21;
+            trackListBox.TabIndex = 26;
             trackListBox.SelectedIndexChanged += trackListBox_SelectedIndexChanged;
             // 
             // transposition
             // 
-            transposition.Location = new Point(121, 94);
+            transposition.Location = new Point(121, 79);
             transposition.Maximum = new decimal(new int[] { 48, 0, 0, 0 });
             transposition.Minimum = new decimal(new int[] { 48, 0, 0, int.MinValue });
             transposition.Name = "transposition";
             transposition.Size = new Size(107, 23);
-            transposition.TabIndex = 20;
+            transposition.TabIndex = 25;
             transposition.ValueChanged += transposition_ValueChanged;
             // 
             // instrumentComboBox
             // 
             instrumentComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             instrumentComboBox.Items.AddRange(new object[] { "Lyre/Zither", "Old Lyre", "Drum", "Waldhorn" });
-            instrumentComboBox.Location = new Point(11, 94);
+            instrumentComboBox.Location = new Point(11, 79);
             instrumentComboBox.Name = "instrumentComboBox";
             instrumentComboBox.Size = new Size(103, 23);
-            instrumentComboBox.TabIndex = 19;
+            instrumentComboBox.TabIndex = 24;
             instrumentComboBox.SelectedIndexChanged += instrumentComboBox_SelectedIndexChanged;
             // 
-            // openWindow
+            // saveButton
             // 
-            openWindow.Location = new Point(11, 66);
-            openWindow.Name = "openWindow";
-            openWindow.Size = new Size(103, 23);
-            openWindow.TabIndex = 18;
-            openWindow.Text = "Open Window";
-            openWindow.UseVisualStyleBackColor = true;
-            openWindow.Click += openWindow_Click;
+            saveButton.Location = new Point(153, 12);
+            saveButton.Name = "saveButton";
+            saveButton.Size = new Size(75, 23);
+            saveButton.TabIndex = 28;
+            saveButton.Text = "Save";
+            saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += saveButton_Click;
             // 
-            // disconnectButton
+            // pingUpDown
             // 
-            disconnectButton.Location = new Point(122, 12);
-            disconnectButton.Name = "disconnectButton";
-            disconnectButton.Size = new Size(107, 23);
-            disconnectButton.TabIndex = 26;
-            disconnectButton.Text = "Disconnect";
-            disconnectButton.UseVisualStyleBackColor = true;
-            disconnectButton.Click += disconnectButton_Click;
+            pingUpDown.Location = new Point(11, 12);
+            pingUpDown.Name = "pingUpDown";
+            pingUpDown.Size = new Size(85, 23);
+            pingUpDown.TabIndex = 29;
+            pingUpDown.ValueChanged += pingUpDown_ValueChanged;
             // 
-            // readyCheckBox
+            // testPingButton
             // 
-            readyCheckBox.AutoSize = true;
-            readyCheckBox.Location = new Point(11, 41);
-            readyCheckBox.Name = "readyCheckBox";
-            readyCheckBox.Size = new Size(58, 19);
-            readyCheckBox.TabIndex = 27;
-            readyCheckBox.Text = "Ready";
-            readyCheckBox.UseVisualStyleBackColor = true;
-            readyCheckBox.CheckedChanged += readyCheckBox_CheckedChanged;
+            testPingButton.Location = new Point(12, 41);
+            testPingButton.Name = "testPingButton";
+            testPingButton.Size = new Size(84, 23);
+            testPingButton.TabIndex = 30;
+            testPingButton.Text = "Test Ping";
+            testPingButton.UseVisualStyleBackColor = true;
+            testPingButton.Click += testPingButton_Click;
             // 
-            // ClientForm
+            // ClientEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(241, 267);
-            Controls.Add(readyCheckBox);
-            Controls.Add(disconnectButton);
+            ClientSize = new Size(239, 247);
+            Controls.Add(testPingButton);
+            Controls.Add(pingUpDown);
+            Controls.Add(saveButton);
             Controls.Add(transpositionLabel);
             Controls.Add(trackListBox);
             Controls.Add(transposition);
             Controls.Add(instrumentComboBox);
-            Controls.Add(openWindow);
-            Name = "ClientForm";
-            Text = "ClientForm";
-            FormClosing += ClientForm_FormClosing;
-            Load += ClientForm_Load;
+            Name = "ClientEditorForm";
+            Text = "ClientEditorForm";
             ((System.ComponentModel.ISupportInitialize)transposition).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pingUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
         private Label transpositionLabel;
         private CheckedListBox trackListBox;
         private NumericUpDown transposition;
         private ComboBox instrumentComboBox;
-        private Button openWindow;
-        private Button disconnectButton;
-        private CheckBox readyCheckBox;
+        private Button saveButton;
+        private NumericUpDown pingUpDown;
+        private Button testPingButton;
     }
 }
