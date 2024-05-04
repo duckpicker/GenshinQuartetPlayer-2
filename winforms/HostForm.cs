@@ -213,11 +213,6 @@ namespace GenshinQuartetPlayer2.winforms
             UpdateClients();
         }
 
-        private void noPlayCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            noPlay = noPlayCheckBox.Checked;
-        }
-
         private void kickButton_Click(object sender, EventArgs e)
         {
             if (clientListBox.SelectedItems != null && clientListBox.SelectedIndex != 0)

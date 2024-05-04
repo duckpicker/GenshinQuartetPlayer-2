@@ -202,7 +202,6 @@
             noPlayCheckBox.TabIndex = 37;
             noPlayCheckBox.Text = "No Play";
             noPlayCheckBox.UseVisualStyleBackColor = true;
-            noPlayCheckBox.CheckedChanged += noPlayCheckBox_CheckedChanged;
             // 
             // clientListBox
             // 
