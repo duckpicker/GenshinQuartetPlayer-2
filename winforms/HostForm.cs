@@ -1,19 +1,6 @@
 ﻿using GenshinQuartetPlayer2.online;
 using GenshinQuartetPlayer2.online.requests;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Entity;
-using System.Drawing;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using WindowsInput;
 
 namespace GenshinQuartetPlayer2.winforms
@@ -200,11 +187,13 @@ namespace GenshinQuartetPlayer2.winforms
             playTrackBar.Value = 0;
             UpdateTimeLabel();
             QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new StopPlay()));
+            QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new NewTrackTime(new TimeSpan(0, 0, 0))));
         }
 
         private void speedNumeric_ValueChanged(object sender, EventArgs e)
         {
             Settings.Speed = speedNumeric.Value;
+            QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new NewTrackSpeed(speedNumeric.Value)));
         }
 
         private void readyCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -301,6 +290,11 @@ namespace GenshinQuartetPlayer2.winforms
                 }
                 else if (playlist.Items.Count != 0) playlist.SelectedIndex = 0;
             }
+        }
+
+        private void HostForm_Load(object sender, EventArgs e)
+        {
+            
         }
     }
 }

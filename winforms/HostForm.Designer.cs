@@ -62,7 +62,7 @@
             speedNumeric.Name = "speedNumeric";
             speedNumeric.Size = new Size(107, 23);
             speedNumeric.TabIndex = 32;
-            speedNumeric.Value = new decimal(new int[] { 1, 0, 0, 65536 });
+            speedNumeric.Value = new decimal(new int[] { 1, 0, 0, 0 });
             speedNumeric.ValueChanged += speedNumeric_ValueChanged;
             // 
             // stopButton
@@ -257,6 +257,7 @@
             Controls.Add(read);
             Name = "HostForm";
             Text = "HostForm";
+            Load += HostForm_Load;
             ((System.ComponentModel.ISupportInitialize)speedNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)playTrackBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)transposition).EndInit();

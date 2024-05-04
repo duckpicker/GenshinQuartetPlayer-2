@@ -1,17 +1,5 @@
 ﻿using GenshinQuartetPlayer2.online.requests;
-using Melanchall.DryWetMidi.Core;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace GenshinQuartetPlayer2.winforms
 {
@@ -25,6 +13,7 @@ namespace GenshinQuartetPlayer2.winforms
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             instrumentComboBox.SelectedIndex = 0;
+            Settings.Speed = 1.0m;
             QuartetClient.ON_NEW_MIDI_FILE += (filePath, legacy) =>
             {
                 if (!legacy) LegacyMode();
@@ -35,6 +24,7 @@ namespace GenshinQuartetPlayer2.winforms
             QuartetClient.ON_START_PLAY += () => StartPlay();
             QuartetClient.ON_STOP_PLAY += () => _midiReader.Stop();
             QuartetClient.ON_NEW_TRACK_TIME += (time) => _currentTime = time;
+            QuartetClient.ON_NEW_TRACK_SPEED += (speed) => Settings.Speed = speed;
         }
 
         private void ClientForm_Load(object sender, EventArgs e)

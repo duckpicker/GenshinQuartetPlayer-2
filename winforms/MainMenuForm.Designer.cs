@@ -41,6 +41,7 @@
             openFileToolStripMenuItem = new ToolStripMenuItem();
             onlineToolStripMenuItem = new ToolStripMenuItem();
             createLobbyToolStripMenuItem = new ToolStripMenuItem();
+            connectToolStripMenuItem = new ToolStripMenuItem();
             deleteButton = new Button();
             transpositionLabel = new Label();
             inputDeviceComboBox = new ComboBox();
@@ -49,7 +50,6 @@
             timeLabel = new Label();
             stopButton = new Button();
             speedNumeric = new NumericUpDown();
-            connectToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)transposition).BeginInit();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)playTrackBar).BeginInit();
@@ -169,9 +169,16 @@
             // createLobbyToolStripMenuItem
             // 
             createLobbyToolStripMenuItem.Name = "createLobbyToolStripMenuItem";
-            createLobbyToolStripMenuItem.Size = new Size(180, 22);
+            createLobbyToolStripMenuItem.Size = new Size(141, 22);
             createLobbyToolStripMenuItem.Text = "Create lobby";
             createLobbyToolStripMenuItem.Click += createLobbyToolStripMenuItem_Click;
+            // 
+            // connectToolStripMenuItem
+            // 
+            connectToolStripMenuItem.Name = "connectToolStripMenuItem";
+            connectToolStripMenuItem.Size = new Size(141, 22);
+            connectToolStripMenuItem.Text = "Connect";
+            connectToolStripMenuItem.Click += connectToolStripMenuItem_Click;
             // 
             // deleteButton
             // 
@@ -250,15 +257,8 @@
             speedNumeric.Name = "speedNumeric";
             speedNumeric.Size = new Size(107, 23);
             speedNumeric.TabIndex = 17;
-            speedNumeric.Value = new decimal(new int[] { 1, 0, 0, 65536 });
+            speedNumeric.Value = new decimal(new int[] { 1, 0, 0, 0 });
             speedNumeric.ValueChanged += speedNumeric_ValueChanged;
-            // 
-            // connectToolStripMenuItem
-            // 
-            connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            connectToolStripMenuItem.Size = new Size(180, 22);
-            connectToolStripMenuItem.Text = "Connect";
-            connectToolStripMenuItem.Click += connectToolStripMenuItem_Click;
             // 
             // MainMenuForm
             // 

@@ -54,6 +54,11 @@ namespace GenshinQuartetPlayer2.online.requests
 
         public static event OnNewTrackTime ON_NEW_TRACK_TIME;
 
+        // set track speed
+        public delegate void OnNewTrackSpeed(decimal speed);
+
+        public static event OnNewTrackSpeed ON_NEW_TRACK_SPEED;
+
 
         public ClientEntry Client { get; private set; }
         public WebSocket WebSocketClient { get; private set; }
@@ -154,6 +159,13 @@ namespace GenshinQuartetPlayer2.online.requests
             {
                 NewTrackTime? newTrackTime = JsonConvert.DeserializeObject<NewTrackTime>(e.Data);
                 ON_NEW_TRACK_TIME?.Invoke(newTrackTime.Time);
+            }
+
+            // new track speed
+            if (typeof(NewTrackSpeed).FullName == jsonBaseRequest.RequestType)
+            {
+                NewTrackSpeed? newTrackSpeed = JsonConvert.DeserializeObject<NewTrackSpeed>(e.Data);
+                ON_NEW_TRACK_SPEED?.Invoke(newTrackSpeed.Speed);
             }
         }
 
