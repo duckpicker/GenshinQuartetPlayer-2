@@ -10,12 +10,16 @@ public class QuartetService : WebSocketBehavior
 {
     // INVOKE TO FORM ----------------------------------
     // update clients
-    public delegate string? UpdateClients(object sender);
+    public delegate string? UpdateClients();
     public static event UpdateClients UPDATE_CLIENTS;
 
     // get client settings
     public delegate void GetClientSettings(ClientNewSettingsEntry settings);
     public static event GetClientSettings GET_CLIENT_SETTINGS;
+
+    // get legacy mode
+    public delegate bool GetLegacyCheck();
+    public static event GetLegacyCheck GET_LEGACY_CHECK;
 
 
 
@@ -79,10 +83,12 @@ public class QuartetService : WebSocketBehavior
 
                 QuartetServer.Instance.ClientEntries.Add(clientEntry);
 
-                string? midiFile = UPDATE_CLIENTS?.Invoke(this);
+                string? midiFile = UPDATE_CLIENTS?.Invoke();
+                bool? legacy = GET_LEGACY_CHECK?.Invoke();
                 NewMidiFile newMidiFile = new NewMidiFile();
                 newMidiFile.ReadFile(midiFile);
                 newMidiFile.SessionId = Sessions.IDs.Last();
+                newMidiFile.Legacy = legacy;
                 string json = JsonConvert.SerializeObject(newMidiFile);
 
                 Send(json);
@@ -96,7 +102,7 @@ public class QuartetService : WebSocketBehavior
                 ReadyState? readyState = JsonConvert.DeserializeObject<ReadyState>(e.Data);
                 var client = QuartetServer.Instance.ClientEntries.FirstOrDefault(c => c.SessionID == readyState.SessionId);
                 client.IsReady = readyState.Ready;
-                UPDATE_CLIENTS?.Invoke(this);
+                UPDATE_CLIENTS?.Invoke();
             }
 
             // client get settings
@@ -135,7 +141,7 @@ public class QuartetService : WebSocketBehavior
                 DisconnectClient? disconnectClient = JsonConvert.DeserializeObject<DisconnectClient>(e.Data);
                 var client = QuartetServer.Instance.ClientEntries.FirstOrDefault(c => c.SessionID == disconnectClient.SessionId);
                 QuartetServer.Instance.ClientEntries.Remove(client);
-                UPDATE_CLIENTS?.Invoke(this);
+                UPDATE_CLIENTS?.Invoke();
             }
         }
         catch (Exception exception)

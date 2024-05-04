@@ -23,8 +23,8 @@ namespace GenshinQuartetPlayer2.winforms
         private void CreateLobbyForm_Load(object sender, EventArgs e)
         {
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            legacyCheckBox.Checked = true;
             nameTextBox.Text = Environment.UserName;
-            //createButton.Enabled = false;
             portTextBox.Text = Settings.port.ToString();
         }
 
@@ -36,7 +36,7 @@ namespace GenshinQuartetPlayer2.winforms
             QuartetServer.Instance.ClientEntries.Add(new ClientEntry(0, nameTextBox.Text, offset));
             QuartetServer.Instance.Start();
 
-            HostForm hostForm = new HostForm(mainMenuForm);
+            HostForm hostForm = new HostForm(mainMenuForm, legacyCheckBox.Checked);
             hostForm.Text = $"Lobby {nameTextBox.Text}";
 
             mainMenuForm.Hide();

@@ -23,8 +23,13 @@ namespace GenshinQuartetPlayer2.winforms
         public ClientForm(MainMenuForm mainMenuForm)
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             instrumentComboBox.SelectedIndex = 0;
-            QuartetClient.ON_NEW_MIDI_FILE += (filePath) => SetNewMidiFile(filePath);
+            QuartetClient.ON_NEW_MIDI_FILE += (filePath, legacy) =>
+            {
+                if (!legacy) LegacyMode();
+                SetNewMidiFile(filePath);
+            };
             QuartetClient.ON_CLIENT_SETTINGS += () => CreateNewSettingsEntry();
             QuartetClient.ON_NEW_SETTINGS += (settings) => SetNewSettings(settings);
             QuartetClient.ON_START_PLAY += () => StartPlay();
@@ -169,6 +174,17 @@ namespace GenshinQuartetPlayer2.winforms
         private void stopButton_Click(object sender, EventArgs e)
         {
             _midiReader.Stop();
+        }
+
+        private void LegacyMode()
+        {
+            foreach (Control control in this.Controls)
+            {
+                control.Enabled = false;
+            }
+            stopButton.Enabled = true;
+            readyCheckBox.Enabled = true;
+            disconnectButton.Enabled = true;
         }
     }
 }

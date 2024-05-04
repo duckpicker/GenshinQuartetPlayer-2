@@ -83,7 +83,6 @@
             timeLabel.Size = new Size(54, 15);
             timeLabel.TabIndex = 30;
             timeLabel.Text = "0:00/0:00";
-            timeLabel.Click += timeLabel_Click;
             // 
             // playTrackBar
             // 
@@ -102,7 +101,6 @@
             transpositionLabel.Size = new Size(42, 15);
             transpositionLabel.TabIndex = 26;
             transpositionLabel.Text = "0: 0 (0)";
-            transpositionLabel.Click += transpositionLabel_Click;
             // 
             // trackListBox
             // 
@@ -214,7 +212,6 @@
             clientListBox.Name = "clientListBox";
             clientListBox.Size = new Size(216, 94);
             clientListBox.TabIndex = 38;
-            clientListBox.SelectedIndexChanged += clientListBox_SelectedIndexChanged;
             // 
             // pingUpDown
             // 
@@ -234,6 +231,7 @@
             addFileButton.TabIndex = 40;
             addFileButton.Text = "Add file";
             addFileButton.UseVisualStyleBackColor = true;
+            addFileButton.Click += addFileButton_Click;
             // 
             // HostForm
             // 

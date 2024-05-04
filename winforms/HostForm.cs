@@ -10,9 +10,11 @@ using System.Data;
 using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsInput;
 
 namespace GenshinQuartetPlayer2.winforms
 {
@@ -22,9 +24,14 @@ namespace GenshinQuartetPlayer2.winforms
         private MidiReader _midiReader;
         private Database _database;
         private TimeSpan _currentTime = new TimeSpan(0, 0, 0);
-        public HostForm(MainMenuForm mainMenuForm)
+        private bool legacy;
+        public HostForm(MainMenuForm mainMenuForm, bool legacy)
         {
             InitializeComponent();
+
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            this.legacy = legacy;
 
             _database = new Database();
             _database.CreateConnection();
@@ -44,7 +51,8 @@ namespace GenshinQuartetPlayer2.winforms
 
             MyPlayback.ON_GAME_UNFOCUS += (e, d) => SetPlayTrackBarValue(d);
 
-            QuartetService.UPDATE_CLIENTS += (e) => UpdateClients();
+            QuartetService.UPDATE_CLIENTS += () => UpdateClients();
+            QuartetService.GET_LEGACY_CHECK += () => { return legacy; };
 
             UpdateClients();
 
@@ -57,8 +65,11 @@ namespace GenshinQuartetPlayer2.winforms
             {
                 QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new StartPlayBroadcast()));
                 var maxPing = QuartetServer.Instance.ClientEntries.Max(c => c.Ping);
-                Thread.Sleep(1000 - maxPing - QuartetServer.Instance.ClientEntries.ElementAt(0).Ping);
-                _midiReader.Start(_currentTime);
+                if (!noPlayCheckBox.Checked)
+                {
+                    Thread.Sleep(1000 + QuartetServer.Instance.ClientEntries.ElementAt(0).Ping);
+                    _midiReader.Start(_currentTime);
+                }
             }
         }
 
@@ -122,30 +133,6 @@ namespace GenshinQuartetPlayer2.winforms
             }
         }
 
-        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "MIDI files (*.mid)|*.mid";
-            openFileDialog.Multiselect = true;
-            openFileDialog.Title = "Select a files";
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                for (int i = 0; i < openFileDialog.FileNames.Length; i++)
-                {
-                    string fileName = openFileDialog.SafeFileNames[i];
-                    string filePath = openFileDialog.FileNames[i];
-                    _database.AddEntry(fileName, filePath);
-                }
-                UpdatePlaylist();
-                if (openFileDialog.FileNames.Length == 1)
-                {
-                    playlist.SelectedIndex = playlist.Items.Count - 1 - openFileDialog.FileNames.Length;
-                }
-                else if (playlist.Items.Count != 0) playlist.SelectedIndex = 0;
-            }
-        }
-
         void UpdatePlaylist()
         {
             playlist.Items.Clear();
@@ -154,29 +141,6 @@ namespace GenshinQuartetPlayer2.winforms
             {
                 playlist.Items.Add(entry.Name);
             }
-        }
-
-        private void deleteButton_Click(object sender, EventArgs e)
-        {
-            if (playlist.Items.Count > 0 && playlist.SelectedIndex != -1)
-            {
-                int nextIndex = playlist.SelectedIndex - 1 > 0 && playlist.SelectedIndex < playlist.Items.Count - 2 ? playlist.SelectedIndex - 1 : 0;
-                _database.DeleteEntryAsync((int)_database.GetAllEntries().GetAwaiter().GetResult()[playlist.SelectedIndex].Id);
-                UpdatePlaylist();
-                if (playlist.Items.Count > 0) playlist.SelectedIndex = nextIndex;
-            }
-        }
-
-        private void nextButton_Click(object sender, EventArgs e)
-        {
-            playlist.SelectedIndex = playlist.SelectedIndex < playlist.Items.Count - 1 ? playlist.SelectedIndex + 1 : 0;
-            _midiReader.Start(new MetricTimeSpan(0, 0, 0));
-        }
-
-        private void previousButton_Click(object sender, EventArgs e)
-        {
-            playlist.SelectedIndex = playlist.SelectedIndex > 0 ? playlist.SelectedIndex - 1 : playlist.Items.Count - 1;
-            _midiReader.Start(new MetricTimeSpan(0, 0, 0));
         }
 
         private int UpdateBestTransposition()
@@ -251,22 +215,7 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void noPlayCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void timeLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void transpositionLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void clientListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            noPlay = noPlayCheckBox.Checked;
         }
 
         private void kickButton_Click(object sender, EventArgs e)
@@ -283,8 +232,10 @@ namespace GenshinQuartetPlayer2.winforms
         private void testButton_Click(object sender, EventArgs e)
         {
             QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new TestNotePlay()));
-            var maxPing = QuartetServer.Instance.ClientEntries.Max(c => c.Ping);
-            Thread.Sleep(1000 - maxPing - QuartetServer.Instance.ClientEntries.ElementAt(0).Ping);
+            WindowFinder.Find();
+            Thread.Sleep(1000 + QuartetServer.Instance.ClientEntries.ElementAt(0).Ping);
+            InputSimulator inputSimulator = new InputSimulator();
+            inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_A);
         }
 
         //----------------------------//
@@ -331,6 +282,30 @@ namespace GenshinQuartetPlayer2.winforms
             QuartetServer.Instance.ClientEntries.ElementAt(0).Ping = (int)pingUpDown.Value;
             var maxPing = QuartetServer.Instance.ClientEntries.Max(c => c.Ping);
             QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new LobbyMaxPing() { MaxPing = maxPing }));
+        }
+
+        private void addFileButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "MIDI files (*.mid)|*.mid";
+            openFileDialog.Multiselect = true;
+            openFileDialog.Title = "Select a files";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                for (int i = 0; i < openFileDialog.FileNames.Length; i++)
+                {
+                    string fileName = openFileDialog.SafeFileNames[i];
+                    string filePath = openFileDialog.FileNames[i];
+                    _database.AddEntry(fileName, filePath);
+                }
+                UpdatePlaylist();
+                if (openFileDialog.FileNames.Length == 1)
+                {
+                    playlist.SelectedIndex = playlist.Items.Count - openFileDialog.FileNames.Length;
+                }
+                else if (playlist.Items.Count != 0) playlist.SelectedIndex = 0;
+            }
         }
     }
 }
