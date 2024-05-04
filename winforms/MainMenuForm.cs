@@ -224,6 +224,7 @@ namespace GenshinQuartetPlayer2
             _currentTime = new TimeSpan(0, 0, 0);
             playTrackBar.Value = 0;
             UpdateTimeLabel();
+            _midiReader.Stop();
         }
 
         private void speedNumeric_ValueChanged(object sender, EventArgs e)

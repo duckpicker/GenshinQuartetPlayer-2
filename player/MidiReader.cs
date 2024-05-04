@@ -61,7 +61,10 @@ namespace GenshinQuartetPlayer2
 
         public void Stop()
         {
-            myPlayBack.Stop();
+            if (myPlayBack != null && myPlayBack.IsRunning)
+            {
+                myPlayBack.Stop();
+            }
         }
     }
 }
