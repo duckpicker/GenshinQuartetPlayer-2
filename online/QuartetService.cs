@@ -55,8 +55,8 @@ public class QuartetService : WebSocketBehavior
 
     public QuartetService()
     {
-        ON_BROADCAST_MESSAGE += BroadcastMessage;
-        ON_PRIVATE_MESSAGE += PrivateMessage;
+        ON_BROADCAST_MESSAGE = BroadcastMessage;
+        ON_PRIVATE_MESSAGE = PrivateMessage;
     }
     
 
@@ -84,8 +84,6 @@ public class QuartetService : WebSocketBehavior
                 newMidiFile.ReadFile(midiFile);
                 newMidiFile.SessionId = Sessions.IDs.Last();
                 string json = JsonConvert.SerializeObject(newMidiFile);
-
-                SendMaxPing();
 
                 Send(json);
             }
@@ -120,6 +118,15 @@ public class QuartetService : WebSocketBehavior
 
                 string json = JsonConvert.SerializeObject(connection);
                 Send(json);
+            }
+
+            // get new ping
+            if (typeof(ClientNewPing).FullName == baseRequest?.RequestType)
+            {
+                ClientNewPing? clientNewPing = JsonConvert.DeserializeObject<ClientNewPing>(e.Data);
+                var client = QuartetServer.Instance.ClientEntries.FirstOrDefault(c => c.SessionID == clientNewPing.SessionId);
+                client.Ping = clientNewPing.Ping;
+                SendMaxPing();
             }
 
             // client disconnect

@@ -19,6 +19,7 @@ namespace GenshinQuartetPlayer2.winforms
     {
         private string _file;
         private MidiReader _midiReader;
+        private TimeSpan _currentTime = new TimeSpan(0, 0, 0);
         public ClientForm(MainMenuForm mainMenuForm)
         {
             InitializeComponent();
@@ -26,6 +27,9 @@ namespace GenshinQuartetPlayer2.winforms
             QuartetClient.ON_NEW_MIDI_FILE += (filePath) => SetNewMidiFile(filePath);
             QuartetClient.ON_CLIENT_SETTINGS += () => CreateNewSettingsEntry();
             QuartetClient.ON_NEW_SETTINGS += (settings) => SetNewSettings(settings);
+            QuartetClient.ON_START_PLAY += () => StartPlay();
+            QuartetClient.ON_STOP_PLAY += () => _midiReader.Stop();
+            QuartetClient.ON_NEW_TRACK_TIME += (time) => _currentTime = time;
         }
 
         private void ClientForm_Load(object sender, EventArgs e)
@@ -71,7 +75,8 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void disconnectButton_Click(object sender, EventArgs e)
         {
-
+            QuartetClient.Instance.Disconnect();
+            Application.Exit();
         }
 
         private int UpdateBestTransposition()
@@ -144,6 +149,7 @@ namespace GenshinQuartetPlayer2.winforms
                     UpdateTrackListBox();
                     QuartetClient.Instance.Client.Ping = settings.NewPing;
                     transposition.Value = settings.Transposition;
+                    QuartetClient.Instance.WebSocketClient.Send(JsonConvert.SerializeObject(new ClientNewPing(QuartetClient.Instance.Client.SessionID, QuartetClient.Instance.Client.Ping)));
                 }));
             }
         }
@@ -151,6 +157,18 @@ namespace GenshinQuartetPlayer2.winforms
         private void ClientForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             QuartetClient.Instance.Disconnect();
+        }
+
+        private void StartPlay()
+        {
+            WindowFinder.Find();
+            Thread.Sleep(1000 - QuartetClient.Instance.Client.MaxPing - QuartetClient.Instance.Client.Ping);
+            _midiReader.Start(_currentTime);
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            _midiReader.Stop();
         }
     }
 }

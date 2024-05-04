@@ -35,6 +35,7 @@
             openWindow = new Button();
             disconnectButton = new Button();
             readyCheckBox = new CheckBox();
+            stopButton = new Button();
             ((System.ComponentModel.ISupportInitialize)transposition).BeginInit();
             SuspendLayout();
             // 
@@ -108,11 +109,22 @@
             readyCheckBox.UseVisualStyleBackColor = true;
             readyCheckBox.CheckedChanged += readyCheckBox_CheckedChanged;
             // 
+            // stopButton
+            // 
+            stopButton.Location = new Point(11, 12);
+            stopButton.Name = "stopButton";
+            stopButton.Size = new Size(35, 23);
+            stopButton.TabIndex = 32;
+            stopButton.Text = "⬛";
+            stopButton.UseVisualStyleBackColor = true;
+            stopButton.Click += stopButton_Click;
+            // 
             // ClientForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(241, 267);
+            Controls.Add(stopButton);
             Controls.Add(readyCheckBox);
             Controls.Add(disconnectButton);
             Controls.Add(transpositionLabel);
@@ -137,5 +149,6 @@
         private Button openWindow;
         private Button disconnectButton;
         private CheckBox readyCheckBox;
+        private Button stopButton;
     }
 }

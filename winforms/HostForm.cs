@@ -40,6 +40,8 @@ namespace GenshinQuartetPlayer2.winforms
                 speedNumeric.Value = 1.0m;
             }
 
+            pingUpDown.Value = QuartetServer.Instance.ClientEntries.ElementAt(0).Ping;
+
             MyPlayback.ON_GAME_UNFOCUS += (e, d) => SetPlayTrackBarValue(d);
 
             QuartetService.UPDATE_CLIENTS += (e) => UpdateClients();
@@ -51,7 +53,13 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void read_Click(object sender, EventArgs e)
         {
-            _midiReader.Start(_currentTime);
+            if (QuartetServer.Instance.ClientEntries.Any(c => c.IsReady))
+            {
+                QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new StartPlayBroadcast()));
+                var maxPing = QuartetServer.Instance.ClientEntries.Max(c => c.Ping);
+                Thread.Sleep(1000 - maxPing - QuartetServer.Instance.ClientEntries.ElementAt(0).Ping);
+                _midiReader.Start(_currentTime);
+            }
         }
 
         private void openWindow_Click(object sender, EventArgs e)
@@ -196,6 +204,7 @@ namespace GenshinQuartetPlayer2.winforms
         {
             _currentTime = TimeSpan.FromMilliseconds((_midiReader.TotalTime.TotalMilliseconds * playTrackBar.Value) / 100);
             UpdateTimeLabel();
+            QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new NewTrackTime(_currentTime)));
         }
 
         public void SetPlayTrackBarValue(TimeSpan timeSpan)
@@ -226,6 +235,7 @@ namespace GenshinQuartetPlayer2.winforms
             _currentTime = new TimeSpan(0, 0, 0);
             playTrackBar.Value = 0;
             UpdateTimeLabel();
+            QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new StopPlay()));
         }
 
         private void speedNumeric_ValueChanged(object sender, EventArgs e)
@@ -272,7 +282,9 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void testButton_Click(object sender, EventArgs e)
         {
-
+            QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new TestNotePlay()));
+            var maxPing = QuartetServer.Instance.ClientEntries.Max(c => c.Ping);
+            Thread.Sleep(1000 - maxPing - QuartetServer.Instance.ClientEntries.ElementAt(0).Ping);
         }
 
         //----------------------------//
@@ -311,7 +323,14 @@ namespace GenshinQuartetPlayer2.winforms
                 ClientEditorForm clientEditorForm = new ClientEditorForm(QuartetServer.Instance.ClientEntries.ElementAt(clientListBox.SelectedIndex));
                 clientEditorForm.ShowDialog();
             }
-            
+
+        }
+
+        private void pingUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            QuartetServer.Instance.ClientEntries.ElementAt(0).Ping = (int)pingUpDown.Value;
+            var maxPing = QuartetServer.Instance.ClientEntries.Max(c => c.Ping);
+            QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new LobbyMaxPing() { MaxPing = maxPing }));
         }
     }
 }

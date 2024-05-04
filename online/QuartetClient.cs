@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WebSocketSharp;
+using WindowsInput;
 
 namespace GenshinQuartetPlayer2.online.requests
 {
@@ -38,6 +39,21 @@ namespace GenshinQuartetPlayer2.online.requests
 
         public static event ClientSetNewSettings ON_NEW_SETTINGS;
 
+        // start midi play
+        public delegate void OnStartPlay();
+
+        public static event OnStartPlay ON_START_PLAY;
+
+        // stop midi play
+        public delegate void OnStopPlay();
+
+        public static event OnStopPlay ON_STOP_PLAY;
+
+        // set track time
+        public delegate void OnNewTrackTime(TimeSpan time);
+
+        public static event OnNewTrackTime ON_NEW_TRACK_TIME;
+
 
         public ClientEntry Client { get; private set; }
         public WebSocket WebSocketClient { get; private set; }
@@ -62,10 +78,10 @@ namespace GenshinQuartetPlayer2.online.requests
                 string path = $"{Path.GetTempPath()}\\temp.mid";
                 ON_NEW_MIDI_FILE.Invoke(path);
                 if (Client.SessionID == "") Client.SessionID = newMidiFile.SessionId;
-                WebSocketClient.Send(JsonConvert.SerializeObject(new ConnectionConfirm(DateTime.Now)));
+                //WebSocketClient.Send(JsonConvert.SerializeObject(new ConnectionConfirm(DateTime.Now)));
             }
 
-            // connection ping
+            // connection ping & send new ping
             if (typeof(ConnectionConfirm).FullName == jsonBaseRequest.RequestType)
             {
                 ConnectionConfirm? connection = JsonConvert.DeserializeObject<ConnectionConfirm>(e.Data);
@@ -73,8 +89,9 @@ namespace GenshinQuartetPlayer2.online.requests
                 if (connection.PingCount == 4)
                 {
                     Console.WriteLine(Client.Ping);
-                    Client.Ping += connection.Ping / 4 / 2;
+                    Client.Ping += (connection.Ping / 4) / 2;
                     Console.WriteLine(Client.Ping);
+                    WebSocketClient.Send(JsonConvert.SerializeObject(new ClientNewPing(Client.SessionID, Client.Ping)));
                 }
                 else
                 {
@@ -110,6 +127,33 @@ namespace GenshinQuartetPlayer2.online.requests
             if (typeof(DisconnectClient).FullName == jsonBaseRequest.RequestType)
             {
                 Disconnect();
+            }
+
+            // start play
+            if (typeof(StartPlayBroadcast).FullName == jsonBaseRequest.RequestType)
+            {
+                ON_START_PLAY?.Invoke();
+            }
+
+            // test play
+            if (typeof(TestNotePlay).FullName == jsonBaseRequest.RequestType)
+            {
+                Thread.Sleep(Client.MaxPing - Client.Ping);
+                InputSimulator inputSimulator = new InputSimulator();
+                inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_A);
+            }
+
+            // stop play
+            if (typeof(StopPlay).FullName == jsonBaseRequest.RequestType)
+            {
+                ON_STOP_PLAY?.Invoke();
+            }
+
+            // new track time
+            if (typeof(NewTrackTime).FullName == jsonBaseRequest.RequestType)
+            {
+                NewTrackTime? newTrackTime = JsonConvert.DeserializeObject<NewTrackTime>(e.Data);
+                ON_NEW_TRACK_TIME?.Invoke(newTrackTime.Time);
             }
         }
 

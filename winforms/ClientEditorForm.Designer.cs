@@ -91,6 +91,7 @@
             // pingUpDown
             // 
             pingUpDown.Location = new Point(11, 12);
+            pingUpDown.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             pingUpDown.Name = "pingUpDown";
             pingUpDown.Size = new Size(85, 23);
             pingUpDown.TabIndex = 29;

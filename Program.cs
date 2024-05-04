@@ -14,9 +14,5 @@ namespace GenshinQuartetPlayer2
             Application.Run(new MainMenuForm());
         }
 
-        // todo
-        // Сделать редактор юзеров (инструмент, дорожки, траспозиция, оффсет)
-        // Передача позиции трека
-        
     }
 }

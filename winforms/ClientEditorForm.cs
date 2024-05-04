@@ -56,6 +56,7 @@ namespace GenshinQuartetPlayer2.winforms
                     _settings = settings;
                     instrumentComboBox.SelectedIndex = (int)settings.Instrument;
                     transposition.Value = settings.Transposition;
+                    pingUpDown.Value = _settings.NewPing;
                     trackListBox.Items.Clear();
                     for (int i = 0; i < _settings.TrackChunksString.Count(); i++)
                     {
@@ -92,7 +93,10 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void testPingButton_Click(object sender, EventArgs e)
         {
-
+            string newJsonSettings = JsonConvert.SerializeObject(new ClientNewSettingsEntry((int)transposition.Value,
+                (Instrument)instrumentComboBox.SelectedIndex, _settings.MutedTrackChunks, (int)pingUpDown.Value, new List<string>()));
+            QuartetService.TriggerPrivateMessage(_client.SessionID, newJsonSettings);
+            QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new TestNotePlay()));
         }
     }
 }

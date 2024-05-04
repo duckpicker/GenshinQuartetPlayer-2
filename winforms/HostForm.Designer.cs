@@ -44,16 +44,19 @@
             testButton = new Button();
             noPlayCheckBox = new CheckBox();
             clientListBox = new ListBox();
+            pingUpDown = new NumericUpDown();
+            addFileButton = new Button();
             ((System.ComponentModel.ISupportInitialize)speedNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)playTrackBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)transposition).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pingUpDown).BeginInit();
             SuspendLayout();
             // 
             // speedNumeric
             // 
             speedNumeric.DecimalPlaces = 1;
             speedNumeric.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            speedNumeric.Location = new Point(121, 279);
+            speedNumeric.Location = new Point(116, 312);
             speedNumeric.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
             speedNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
             speedNumeric.Name = "speedNumeric";
@@ -64,7 +67,7 @@
             // 
             // stopButton
             // 
-            stopButton.Location = new Point(77, 142);
+            stopButton.Location = new Point(72, 175);
             stopButton.Name = "stopButton";
             stopButton.Size = new Size(35, 23);
             stopButton.TabIndex = 31;
@@ -75,7 +78,7 @@
             // timeLabel
             // 
             timeLabel.AutoSize = true;
-            timeLabel.Location = new Point(94, 201);
+            timeLabel.Location = new Point(89, 234);
             timeLabel.Name = "timeLabel";
             timeLabel.Size = new Size(54, 15);
             timeLabel.TabIndex = 30;
@@ -84,7 +87,7 @@
             // 
             // playTrackBar
             // 
-            playTrackBar.Location = new Point(11, 171);
+            playTrackBar.Location = new Point(6, 204);
             playTrackBar.Maximum = 100;
             playTrackBar.Name = "playTrackBar";
             playTrackBar.Size = new Size(217, 45);
@@ -94,7 +97,7 @@
             // transpositionLabel
             // 
             transpositionLabel.AutoSize = true;
-            transpositionLabel.Location = new Point(121, 227);
+            transpositionLabel.Location = new Point(116, 260);
             transpositionLabel.Name = "transpositionLabel";
             transpositionLabel.Size = new Size(42, 15);
             transpositionLabel.TabIndex = 26;
@@ -105,7 +108,7 @@
             // 
             trackListBox.CheckOnClick = true;
             trackListBox.FormattingEnabled = true;
-            trackListBox.Location = new Point(12, 308);
+            trackListBox.Location = new Point(7, 341);
             trackListBox.Name = "trackListBox";
             trackListBox.Size = new Size(216, 130);
             trackListBox.TabIndex = 23;
@@ -113,7 +116,7 @@
             // 
             // transposition
             // 
-            transposition.Location = new Point(121, 251);
+            transposition.Location = new Point(116, 284);
             transposition.Maximum = new decimal(new int[] { 48, 0, 0, 0 });
             transposition.Minimum = new decimal(new int[] { 48, 0, 0, int.MinValue });
             transposition.Name = "transposition";
@@ -125,7 +128,7 @@
             // 
             instrumentComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             instrumentComboBox.Items.AddRange(new object[] { "Lyre/Zither", "Old Lyre", "Drum", "Waldhorn" });
-            instrumentComboBox.Location = new Point(11, 279);
+            instrumentComboBox.Location = new Point(6, 312);
             instrumentComboBox.Name = "instrumentComboBox";
             instrumentComboBox.Size = new Size(103, 23);
             instrumentComboBox.TabIndex = 21;
@@ -135,15 +138,15 @@
             // 
             playlist.FormattingEnabled = true;
             playlist.ItemHeight = 15;
-            playlist.Location = new Point(238, 14);
+            playlist.Location = new Point(233, 17);
             playlist.Name = "playlist";
-            playlist.Size = new Size(231, 424);
+            playlist.Size = new Size(231, 454);
             playlist.TabIndex = 20;
             playlist.SelectedIndexChanged += playlist_SelectedIndexChanged;
             // 
             // openWindow
             // 
-            openWindow.Location = new Point(11, 251);
+            openWindow.Location = new Point(6, 284);
             openWindow.Name = "openWindow";
             openWindow.Size = new Size(103, 23);
             openWindow.TabIndex = 19;
@@ -153,7 +156,7 @@
             // 
             // read
             // 
-            read.Location = new Point(118, 142);
+            read.Location = new Point(113, 175);
             read.Name = "read";
             read.Size = new Size(35, 23);
             read.TabIndex = 18;
@@ -164,7 +167,7 @@
             // readyCheckBox
             // 
             readyCheckBox.AutoSize = true;
-            readyCheckBox.Location = new Point(12, 202);
+            readyCheckBox.Location = new Point(7, 235);
             readyCheckBox.Name = "readyCheckBox";
             readyCheckBox.Size = new Size(58, 19);
             readyCheckBox.TabIndex = 34;
@@ -174,7 +177,7 @@
             // 
             // kickButton
             // 
-            kickButton.Location = new Point(12, 14);
+            kickButton.Location = new Point(7, 47);
             kickButton.Name = "kickButton";
             kickButton.Size = new Size(75, 23);
             kickButton.TabIndex = 35;
@@ -184,7 +187,7 @@
             // 
             // testButton
             // 
-            testButton.Location = new Point(94, 14);
+            testButton.Location = new Point(148, 47);
             testButton.Name = "testButton";
             testButton.Size = new Size(75, 23);
             testButton.TabIndex = 36;
@@ -195,7 +198,7 @@
             // noPlayCheckBox
             // 
             noPlayCheckBox.AutoSize = true;
-            noPlayCheckBox.Location = new Point(12, 227);
+            noPlayCheckBox.Location = new Point(7, 260);
             noPlayCheckBox.Name = "noPlayCheckBox";
             noPlayCheckBox.Size = new Size(67, 19);
             noPlayCheckBox.TabIndex = 37;
@@ -207,17 +210,38 @@
             // 
             clientListBox.FormattingEnabled = true;
             clientListBox.ItemHeight = 15;
-            clientListBox.Location = new Point(12, 43);
+            clientListBox.Location = new Point(7, 76);
             clientListBox.Name = "clientListBox";
             clientListBox.Size = new Size(216, 94);
             clientListBox.TabIndex = 38;
             clientListBox.SelectedIndexChanged += clientListBox_SelectedIndexChanged;
             // 
+            // pingUpDown
+            // 
+            pingUpDown.Location = new Point(148, 18);
+            pingUpDown.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            pingUpDown.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
+            pingUpDown.Name = "pingUpDown";
+            pingUpDown.Size = new Size(75, 23);
+            pingUpDown.TabIndex = 39;
+            pingUpDown.ValueChanged += pingUpDown_ValueChanged;
+            // 
+            // addFileButton
+            // 
+            addFileButton.Location = new Point(7, 18);
+            addFileButton.Name = "addFileButton";
+            addFileButton.Size = new Size(75, 23);
+            addFileButton.TabIndex = 40;
+            addFileButton.Text = "Add file";
+            addFileButton.UseVisualStyleBackColor = true;
+            // 
             // HostForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(476, 450);
+            ClientSize = new Size(476, 483);
+            Controls.Add(addFileButton);
+            Controls.Add(pingUpDown);
             Controls.Add(clientListBox);
             Controls.Add(noPlayCheckBox);
             Controls.Add(testButton);
@@ -239,6 +263,7 @@
             ((System.ComponentModel.ISupportInitialize)speedNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)playTrackBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)transposition).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pingUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -261,5 +286,7 @@
         private Button testButton;
         private CheckBox noPlayCheckBox;
         private ListBox clientListBox;
+        private NumericUpDown pingUpDown;
+        private Button addFileButton;
     }
 }
