@@ -10,9 +10,10 @@ namespace GenshinQuartetPlayer2
     {
 
         private const int _leftBottomNoteNumber = 48;
+        private const int _leftBottomWaldHornNoteNumber = 60;
         private const int _rightTopLyreNoteNumber = 83;
         private const int _rightTopOldLyreNoteNumber = 82;
-        private const int _rightTopWarldhownTopNoteNumber = 71;
+        private const int _rightTopWaldhownNoteNumber = 83;
         private const int _octave = 12;
 
         public Transposition()
@@ -24,16 +25,21 @@ namespace GenshinQuartetPlayer2
             note += Settings.Transposition;
             if (Settings.Instrument != Instrument.Drum)
             {
-                if (note < _leftBottomNoteNumber)
+                if (note < _leftBottomNoteNumber && Settings.Instrument != Instrument.Waldhorn)
                 {
-                    while (note <= _leftBottomNoteNumber) note += _octave;
+                    while (note < _leftBottomNoteNumber) note += _octave;
+                    return note;
+                }
+                if (note < _leftBottomWaldHornNoteNumber && Settings.Instrument == Instrument.Waldhorn)
+                {
+                    while (note < _leftBottomWaldHornNoteNumber) note += _octave;
                     return note;
                 }
                 switch (Settings.Instrument)
                 {
                     case Instrument.Waldhorn:
                         {
-                            while (note > _rightTopWarldhownTopNoteNumber) note -= _octave;
+                            while (note > _rightTopWaldhownNoteNumber) note -= _octave;
                             return note;
                         }
                     case Instrument.OldLyre:

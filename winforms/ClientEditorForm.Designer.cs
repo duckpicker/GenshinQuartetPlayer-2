@@ -120,7 +120,7 @@
             Controls.Add(transposition);
             Controls.Add(instrumentComboBox);
             Name = "ClientEditorForm";
-            Text = "ClientEditorForm";
+            Text = "Editor";
             ((System.ComponentModel.ISupportInitialize)transposition).EndInit();
             ((System.ComponentModel.ISupportInitialize)pingUpDown).EndInit();
             ResumeLayout(false);

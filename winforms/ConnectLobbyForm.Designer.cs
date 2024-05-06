@@ -132,7 +132,7 @@
             Controls.Add(offsetTextBox);
             Controls.Add(nameTextBox);
             Name = "ConnectLobbyForm";
-            Text = "ConnectLobbyForm";
+            Text = "Connect";
             ResumeLayout(false);
             PerformLayout();
         }
