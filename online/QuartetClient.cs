@@ -143,7 +143,7 @@ namespace GenshinQuartetPlayer2.online.requests
             // test play
             if (typeof(TestNotePlay).FullName == jsonBaseRequest.RequestType)
             {
-                Thread.Sleep(Client.MaxPing - Client.Ping);
+                Thread.Sleep(1000 - Client.MaxPing - Client.Ping);
                 InputSimulator inputSimulator = new InputSimulator();
                 inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_A);
             }
