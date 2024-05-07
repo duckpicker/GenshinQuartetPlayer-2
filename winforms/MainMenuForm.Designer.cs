@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenuForm));
             read = new Button();
             openWindow = new Button();
             playlist = new ListBox();
@@ -282,9 +283,11 @@
             Controls.Add(openWindow);
             Controls.Add(read);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "MainMenuForm";
             Text = "GenshinQuartetPlayer 2";
+            FormClosing += MainMenuForm_FormClosing;
             Load += MainMenuForm_Load;
             ((System.ComponentModel.ISupportInitialize)transposition).EndInit();
             menuStrip1.ResumeLayout(false);

@@ -11,14 +11,11 @@ namespace GenshinQuartetPlayer2.winforms
         private MidiReader _midiReader;
         private Database _database;
         private TimeSpan _currentTime = new TimeSpan(0, 0, 0);
-        private bool legacy;
-        public HostForm(MainMenuForm mainMenuForm, bool legacy)
+        public HostForm(MainMenuForm mainMenuForm)
         {
             InitializeComponent();
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-
-            this.legacy = legacy;
 
             _database = new Database();
             _database.CreateConnection();
@@ -39,7 +36,6 @@ namespace GenshinQuartetPlayer2.winforms
             MyPlayback.ON_GAME_UNFOCUS += (e, d) => SetPlayTrackBarValue(d);
 
             QuartetService.UPDATE_CLIENTS += () => UpdateClients();
-            QuartetService.GET_LEGACY_CHECK += () => { return legacy; };
 
             UpdateClients();
 
@@ -294,7 +290,12 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void HostForm_Load(object sender, EventArgs e)
         {
-            
+
+        }
+
+        private void HostForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

@@ -6,8 +6,6 @@ public class NewMidiFile : BaseRequest
 
     public string SessionId { get; set; }
 
-    public bool? Legacy { get; set; }
-
     public NewMidiFile()
     {
 

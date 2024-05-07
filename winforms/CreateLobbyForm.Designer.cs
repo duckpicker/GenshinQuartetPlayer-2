@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateLobbyForm));
             nameTextBox = new TextBox();
             offsetTextBox = new TextBox();
             portTextBox = new TextBox();
             createButton = new Button();
-            legacyCheckBox = new CheckBox();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -72,16 +72,6 @@
             createButton.UseVisualStyleBackColor = true;
             createButton.Click += createButton_Click;
             // 
-            // legacyCheckBox
-            // 
-            legacyCheckBox.AutoSize = true;
-            legacyCheckBox.Location = new Point(118, 87);
-            legacyCheckBox.Name = "legacyCheckBox";
-            legacyCheckBox.Size = new Size(97, 19);
-            legacyCheckBox.TabIndex = 4;
-            legacyCheckBox.Text = "Legacy mode";
-            legacyCheckBox.UseVisualStyleBackColor = true;
-            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -117,11 +107,11 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(legacyCheckBox);
             Controls.Add(createButton);
             Controls.Add(portTextBox);
             Controls.Add(offsetTextBox);
             Controls.Add(nameTextBox);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "CreateLobbyForm";
             Text = "Create lobby";
             Load += CreateLobbyForm_Load;
@@ -135,7 +125,6 @@
         private TextBox offsetTextBox;
         private TextBox portTextBox;
         private Button createButton;
-        private CheckBox legacyCheckBox;
         private Label label1;
         private Label label2;
         private Label label3;

@@ -25,7 +25,7 @@ namespace GenshinQuartetPlayer2.online.requests
 
         // INVOKE TO FORM ----------------------------------
         // new midi file invoke
-        public delegate void OnNewMidiFile(string newMidiFilePath, bool legacy);
+        public delegate void OnNewMidiFile(string newMidiFilePath);
 
         public static event OnNewMidiFile ON_NEW_MIDI_FILE;
 
@@ -81,7 +81,7 @@ namespace GenshinQuartetPlayer2.online.requests
                 NewMidiFile newMidiFile = JsonConvert.DeserializeObject<NewMidiFile>(e.Data);
                 File.WriteAllBytes(Path.Combine(Path.GetTempPath(), "temp.mid"), newMidiFile.FileBytes);
                 string path = $"{Path.GetTempPath()}\\temp.mid";
-                ON_NEW_MIDI_FILE.Invoke(path, (bool)newMidiFile.Legacy);
+                ON_NEW_MIDI_FILE.Invoke(path);
                 if (Client.SessionID == "") Client.SessionID = newMidiFile.SessionId;
                 //WebSocketClient.Send(JsonConvert.SerializeObject(new ConnectionConfirm(DateTime.Now)));
             }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectLobbyForm));
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
@@ -131,6 +132,7 @@
             Controls.Add(portTextBox);
             Controls.Add(offsetTextBox);
             Controls.Add(nameTextBox);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ConnectLobbyForm";
             Text = "Connect";
             ResumeLayout(false);

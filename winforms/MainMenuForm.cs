@@ -249,5 +249,10 @@ namespace GenshinQuartetPlayer2
             ConnectLobbyForm connect = new ConnectLobbyForm(this);
             connect.ShowDialog();
         }
+
+        private void MainMenuForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

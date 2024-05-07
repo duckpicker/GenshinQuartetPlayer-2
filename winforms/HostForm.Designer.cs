@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HostForm));
             speedNumeric = new NumericUpDown();
             stopButton = new Button();
             timeLabel = new Label();
@@ -255,8 +256,10 @@
             Controls.Add(playlist);
             Controls.Add(openWindow);
             Controls.Add(read);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "HostForm";
             Text = "HostForm";
+            FormClosing += HostForm_FormClosing;
             Load += HostForm_Load;
             ((System.ComponentModel.ISupportInitialize)speedNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)playTrackBar).EndInit();

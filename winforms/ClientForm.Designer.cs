@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClientForm));
             transpositionLabel = new Label();
             trackListBox = new CheckedListBox();
             transposition = new NumericUpDown();
@@ -132,6 +133,7 @@
             Controls.Add(transposition);
             Controls.Add(instrumentComboBox);
             Controls.Add(openWindow);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ClientForm";
             Text = "ClientForm";
             FormClosing += ClientForm_FormClosing;

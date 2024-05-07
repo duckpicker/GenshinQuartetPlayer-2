@@ -17,11 +17,6 @@ public class QuartetService : WebSocketBehavior
     public delegate void GetClientSettings(ClientNewSettingsEntry settings);
     public static event GetClientSettings GET_CLIENT_SETTINGS;
 
-    // get legacy mode
-    public delegate bool GetLegacyCheck();
-    public static event GetLegacyCheck GET_LEGACY_CHECK;
-
-
 
     // INVOKE FROM FORM ----------------------------------
     // broadcast message
@@ -84,11 +79,9 @@ public class QuartetService : WebSocketBehavior
                 QuartetServer.Instance.ClientEntries.Add(clientEntry);
 
                 string? midiFile = UPDATE_CLIENTS?.Invoke();
-                bool? legacy = GET_LEGACY_CHECK?.Invoke();
                 NewMidiFile newMidiFile = new NewMidiFile();
                 newMidiFile.ReadFile(midiFile);
                 newMidiFile.SessionId = Sessions.IDs.Last();
-                newMidiFile.Legacy = legacy;
                 string json = JsonConvert.SerializeObject(newMidiFile);
 
                 Send(json);
