@@ -135,7 +135,7 @@
             Controls.Add(openWindow);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ClientForm";
-            Text = "ClientForm";
+            Text = "QuartetPlayer 2";
             FormClosing += ClientForm_FormClosing;
             Load += ClientForm_Load;
             ((System.ComponentModel.ISupportInitialize)transposition).EndInit();

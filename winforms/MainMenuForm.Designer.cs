@@ -286,7 +286,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "MainMenuForm";
-            Text = "GenshinQuartetPlayer 2";
+            Text = "QuartetPlayer 2";
             FormClosing += MainMenuForm_FormClosing;
             Load += MainMenuForm_Load;
             ((System.ComponentModel.ISupportInitialize)transposition).EndInit();
