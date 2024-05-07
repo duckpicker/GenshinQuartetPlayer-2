@@ -166,21 +166,22 @@ namespace GenshinQuartetPlayer2
 
         private static Dictionary<int, VirtualKeyCode> noteToKeyDrum = new()
         {
-            {48, VirtualKeyCode.VK_S}, //kick
-            {50, VirtualKeyCode.VK_A}, //snare
-            {51, VirtualKeyCode.VK_A}, //snare
+            {48, VirtualKeyCode.VK_S}, // kick
+            {50, VirtualKeyCode.VK_A}, // snare
+            {51, VirtualKeyCode.VK_A}, // snare
 
-            {47, VirtualKeyCode.VK_S}, //kick
-            {52, VirtualKeyCode.VK_A}, //snare
+            {47, VirtualKeyCode.VK_S}, // kick
+            {52, VirtualKeyCode.VK_A}, // snare
 
 
-            {53, VirtualKeyCode.VK_K}, //low toms
+            {53, VirtualKeyCode.VK_K}, // low toms
             {55, VirtualKeyCode.VK_K},
             {57, VirtualKeyCode.VK_K},
             
-            {59, VirtualKeyCode.VK_L}, //high toms
-            {61, VirtualKeyCode.VK_L},
-            {62, VirtualKeyCode.VK_L},
+            {59, VirtualKeyCode.VK_L}, // high toms
+            {60, VirtualKeyCode.VK_L},
+
+            {61, VirtualKeyCode.VK_L}, // crash
         };
     }
 }
