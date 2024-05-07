@@ -12,7 +12,7 @@ namespace GenshinQuartetPlayer2.winforms
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             nameTextBox.Text = Environment.UserName;
             //createButton.Enabled = false;
-            portTextBox.Text = Settings.port.ToString();
+            portTextBox.Text = Settings.Port.ToString();
         }
 
         private void nameTextBox_TextChanged(object sender, EventArgs e)

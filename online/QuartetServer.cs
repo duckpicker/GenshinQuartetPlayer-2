@@ -23,7 +23,7 @@ public class QuartetServer
 
     public void Start()
     {
-        Listener = new WebSocketServer($"ws://{_ipAddress}:{Settings.port}");
+        Listener = new WebSocketServer($"ws://{_ipAddress}:{Settings.Port}");
         Listener.AddWebSocketService<QuartetService>("/QuartetService");
         Listener.Start();
         Console.WriteLine($@"Host started {Listener.Address}");

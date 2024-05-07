@@ -51,6 +51,7 @@
             timeLabel = new Label();
             stopButton = new Button();
             speedNumeric = new NumericUpDown();
+            settingsToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)transposition).BeginInit();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)playTrackBar).BeginInit();
@@ -139,7 +140,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, onlineToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, onlineToolStripMenuItem, settingsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(482, 24);
@@ -261,6 +262,13 @@
             speedNumeric.Value = new decimal(new int[] { 1, 0, 0, 0 });
             speedNumeric.ValueChanged += speedNumeric_ValueChanged;
             // 
+            // settingsToolStripMenuItem
+            // 
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new Size(61, 20);
+            settingsToolStripMenuItem.Text = "Settings";
+            settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
+            // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -322,5 +330,6 @@
         private ToolStripMenuItem onlineToolStripMenuItem;
         private ToolStripMenuItem createLobbyToolStripMenuItem;
         private ToolStripMenuItem connectToolStripMenuItem;
+        private ToolStripMenuItem settingsToolStripMenuItem;
     }
 }

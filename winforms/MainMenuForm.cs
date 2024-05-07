@@ -254,5 +254,11 @@ namespace GenshinQuartetPlayer2
         {
             Application.Exit();
         }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm settingsForm = new SettingsForm();
+            settingsForm.ShowDialog();
+        }
     }
 }
