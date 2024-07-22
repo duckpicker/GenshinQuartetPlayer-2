@@ -63,6 +63,7 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void playlist_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _midiReader.myPlayBack.DisposeDevice();
             if (playlist.SelectedIndex != -1 && !File.Exists(_database.GetAllEntries().GetAwaiter().GetResult()[playlist.SelectedIndex].FilePath))
             {
                 _database.DeleteEntryAsync((int)_database.GetAllEntries().GetAwaiter().GetResult()[playlist.SelectedIndex].Id);
