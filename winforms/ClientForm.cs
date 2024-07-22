@@ -97,6 +97,7 @@ namespace GenshinQuartetPlayer2.winforms
             {
                 this.Invoke(new Action(() =>
                 {
+                    _midiReader.myPlayBack.DisposeDevice();
                     _file = filePath;
                     _midiReader = new MidiReader(_file);
                     UpdateTrackListBox();
