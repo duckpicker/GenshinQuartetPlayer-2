@@ -7,7 +7,6 @@ namespace GenshinQuartetPlayer2
         private static MidiIn _midiIn;
 
         private static KeyboardEmulator _emulator = new KeyboardEmulator();
-        private static Transposition _transposition = new Transposition();
         public static void StartInputDevice(int id)
         {
             _midiIn = new MidiIn(id);
@@ -41,7 +40,7 @@ namespace GenshinQuartetPlayer2
                         {
                             var noteEvent = (NoteEvent)e.MidiEvent;
                             if (!WindowFinder.WindowStatus()) break;
-                            _emulator.Emulator(_transposition.Transpose(noteEvent.NoteNumber), noteEvent.Velocity);
+                            _emulator.Emulator(noteEvent.NoteNumber, noteEvent.Velocity);
                             break;
                         }
                 }

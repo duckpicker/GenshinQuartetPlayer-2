@@ -15,7 +15,7 @@ namespace GenshinQuartetPlayer2
     {
         private IEnumerable<MidiPlay> timedEvents { get; set; }
         private TempoMap tempoMap { get; set; }
-        private MyPlayback myPlayBack { get; set; }
+        public MyPlayback myPlayBack { get; set; }
 
         public MidiFile MidiFile { get; private set; }
         public IEnumerable<TrackChunk> TrackChunks { get; private set; }

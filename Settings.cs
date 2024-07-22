@@ -13,5 +13,7 @@ namespace GenshinQuartetPlayer2
         public static int TrimDurationTime = 24;
         public static decimal Speed = 1.0m;
         public static int Port = 8080;
+        public static bool BackgroundMidiEvents = false;
+        public static bool BackgroundAllMidiEvents = false;
     }
 }

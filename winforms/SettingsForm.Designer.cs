@@ -33,6 +33,8 @@
             label1 = new Label();
             label2 = new Label();
             saveButton = new Button();
+            backgroundMidiPlayback = new CheckBox();
+            backgroundAllMidiPlayback = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)portUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trimDurationTimeUpDown).BeginInit();
             SuspendLayout();
@@ -72,7 +74,7 @@
             // 
             // saveButton
             // 
-            saveButton.Location = new Point(12, 103);
+            saveButton.Location = new Point(126, 74);
             saveButton.Name = "saveButton";
             saveButton.Size = new Size(69, 23);
             saveButton.TabIndex = 4;
@@ -80,11 +82,35 @@
             saveButton.UseVisualStyleBackColor = true;
             saveButton.Click += saveButton_Click;
             // 
+            // backgroundMidiPlayback
+            // 
+            backgroundMidiPlayback.AutoSize = true;
+            backgroundMidiPlayback.Location = new Point(126, 30);
+            backgroundMidiPlayback.Name = "backgroundMidiPlayback";
+            backgroundMidiPlayback.Size = new Size(100, 19);
+            backgroundMidiPlayback.TabIndex = 5;
+            backgroundMidiPlayback.Text = "Midi playback";
+            backgroundMidiPlayback.UseVisualStyleBackColor = true;
+            backgroundMidiPlayback.CheckedChanged += backgroundMidiPlayback_CheckedChanged;
+            // 
+            // backgroundAllMidiPlayback
+            // 
+            backgroundAllMidiPlayback.AutoSize = true;
+            backgroundAllMidiPlayback.Location = new Point(126, 55);
+            backgroundAllMidiPlayback.Name = "backgroundAllMidiPlayback";
+            backgroundAllMidiPlayback.Size = new Size(106, 19);
+            backgroundAllMidiPlayback.TabIndex = 6;
+            backgroundAllMidiPlayback.Text = "Muted channel";
+            backgroundAllMidiPlayback.UseVisualStyleBackColor = true;
+            backgroundAllMidiPlayback.CheckedChanged += backgroundAllMidiPlayback_CheckedChanged;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(137, 146);
+            ClientSize = new Size(234, 117);
+            Controls.Add(backgroundAllMidiPlayback);
+            Controls.Add(backgroundMidiPlayback);
             Controls.Add(saveButton);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -105,5 +131,7 @@
         private Label label1;
         private Label label2;
         private Button saveButton;
+        private CheckBox backgroundMidiPlayback;
+        private CheckBox backgroundAllMidiPlayback;
     }
 }

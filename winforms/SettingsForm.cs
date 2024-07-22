@@ -24,12 +24,32 @@ namespace GenshinQuartetPlayer2.winforms
 
             portUpDown.Value = Settings.Port;
             trimDurationTimeUpDown.Value = Settings.TrimDurationTime;
+            backgroundAllMidiPlayback.Checked = Settings.BackgroundAllMidiEvents;
+            backgroundMidiPlayback.Checked = Settings.BackgroundMidiEvents;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
             Settings.Port = (int)portUpDown.Value;
             Settings.TrimDurationTime = (int)trimDurationTimeUpDown.Value;
+            Settings.BackgroundAllMidiEvents = backgroundAllMidiPlayback.Checked;
+            Settings.BackgroundMidiEvents = backgroundMidiPlayback.Checked;
+            this.Close();
+        }
+
+        private void backgroundMidiPlayback_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void backgroundAllMidiPlayback_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericPlaybackOffset_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

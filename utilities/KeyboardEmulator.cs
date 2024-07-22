@@ -7,8 +7,8 @@ namespace GenshinQuartetPlayer2
 {
     class KeyboardEmulator
     {
-        private static Transposition _transposition;
-        private static InputSimulator _inputSimulator;
+        private Transposition _transposition;
+        private InputSimulator _inputSimulator;
 
         private const int _drumChanel = 9;
         public KeyboardEmulator()
