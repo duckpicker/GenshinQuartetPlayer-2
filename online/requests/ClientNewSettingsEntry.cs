@@ -14,13 +14,16 @@ namespace GenshinQuartetPlayer2.online.requests
         public int NewPing { get; set; }
         public List<string> TrackChunksString { get; set; }
 
-        public ClientNewSettingsEntry(int transposition, Instrument instrument, HashSet<int> mutedTrackChunks, int newPing, List<string> trackChunksString)
+        public int? UkuleleChordChanell = null;
+
+        public ClientNewSettingsEntry(int transposition, Instrument instrument, HashSet<int> mutedTrackChunks, int newPing, List<string> trackChunksString, int? ukuleleChordChanell)
         {
             Transposition = transposition;
             Instrument = instrument;
             MutedTrackChunks = mutedTrackChunks;
             NewPing = newPing;
             TrackChunksString = trackChunksString;
+            UkuleleChordChanell = ukuleleChordChanell;
         }
     }
 }

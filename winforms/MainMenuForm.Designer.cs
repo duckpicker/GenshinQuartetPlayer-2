@@ -43,6 +43,7 @@
             onlineToolStripMenuItem = new ToolStripMenuItem();
             createLobbyToolStripMenuItem = new ToolStripMenuItem();
             connectToolStripMenuItem = new ToolStripMenuItem();
+            settingsToolStripMenuItem = new ToolStripMenuItem();
             deleteButton = new Button();
             transpositionLabel = new Label();
             inputDeviceComboBox = new ComboBox();
@@ -51,7 +52,6 @@
             timeLabel = new Label();
             stopButton = new Button();
             speedNumeric = new NumericUpDown();
-            settingsToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)transposition).BeginInit();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)playTrackBar).BeginInit();
@@ -91,7 +91,7 @@
             // instrumentComboBox
             // 
             instrumentComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            instrumentComboBox.Items.AddRange(new object[] { "Lyre/Zither", "Old Lyre", "Drum", "Waldhorn" });
+            instrumentComboBox.Items.AddRange(new object[] { "Lyre/Zither", "Old Lyre", "Drum", "Waldhorn", "Ukulele", "Jam Jam" });
             instrumentComboBox.Location = new Point(12, 282);
             instrumentComboBox.Name = "instrumentComboBox";
             instrumentComboBox.Size = new Size(103, 23);
@@ -117,6 +117,7 @@
             trackListBox.Size = new Size(216, 130);
             trackListBox.TabIndex = 6;
             trackListBox.SelectedIndexChanged += trackListBox_SelectedIndexChanged;
+            trackListBox.MouseDown += trackListBox_MouseDown;
             // 
             // nextButton
             // 
@@ -181,6 +182,13 @@
             connectToolStripMenuItem.Size = new Size(141, 22);
             connectToolStripMenuItem.Text = "Connect";
             connectToolStripMenuItem.Click += connectToolStripMenuItem_Click;
+            // 
+            // settingsToolStripMenuItem
+            // 
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new Size(61, 20);
+            settingsToolStripMenuItem.Text = "Settings";
+            settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
             // deleteButton
             // 
@@ -261,13 +269,6 @@
             speedNumeric.TabIndex = 17;
             speedNumeric.Value = new decimal(new int[] { 1, 0, 0, 0 });
             speedNumeric.ValueChanged += speedNumeric_ValueChanged;
-            // 
-            // settingsToolStripMenuItem
-            // 
-            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(61, 20);
-            settingsToolStripMenuItem.Text = "Settings";
-            settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
             // MainMenuForm
             // 

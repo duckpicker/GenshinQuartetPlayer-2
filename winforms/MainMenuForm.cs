@@ -1,5 +1,6 @@
 using GenshinQuartetPlayer2.winforms;
 using Melanchall.DryWetMidi.Interaction;
+using System.Windows.Forms;
 
 
 namespace GenshinQuartetPlayer2
@@ -260,6 +261,21 @@ namespace GenshinQuartetPlayer2
         {
             SettingsForm settingsForm = new SettingsForm();
             settingsForm.ShowDialog();
+        }
+
+        private ListViewItem selectedItem = null;
+
+        private void trackListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int index = trackListBox.IndexFromPoint(e.X, e.Y);
+                if (index != ListBox.NoMatches)
+                {
+                    Settings.SetUkuleleChordChanell(index);
+                    Console.WriteLine($"chord index {index}");
+                }
+            }
         }
     }
 }

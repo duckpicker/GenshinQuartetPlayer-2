@@ -97,9 +97,9 @@ namespace GenshinQuartetPlayer2.winforms
             {
                 this.Invoke(new Action(() =>
                 {
-                    _midiReader.myPlayBack.DisposeDevice();
                     _file = filePath;
                     _midiReader = new MidiReader(_file);
+                    _midiReader.myPlayBack.DisposeDevice();
                     UpdateTrackListBox();
                     UpdateBestTransposition();
                 }));
@@ -126,7 +126,7 @@ namespace GenshinQuartetPlayer2.winforms
                 chunks.Add(track.ToString());
             }
             return new ClientNewSettingsEntry((int)transposition.Value, Settings.Instrument,
-                _midiReader.MutedTrackChunks, QuartetClient.Instance.Client.Ping, chunks);
+                _midiReader.MutedTrackChunks, QuartetClient.Instance.Client.Ping, chunks, Settings.UkuleleChordChanell);
         }
 
         private void SetNewSettings(ClientNewSettingsEntry settings)
@@ -141,6 +141,7 @@ namespace GenshinQuartetPlayer2.winforms
                     UpdateTrackListBox();
                     QuartetClient.Instance.Client.Ping = settings.NewPing;
                     transposition.Value = settings.Transposition;
+                    Settings.UkuleleChordChanell = settings.UkuleleChordChanell;
                     QuartetClient.Instance.WebSocketClient.Send(JsonConvert.SerializeObject(new ClientNewPing(QuartetClient.Instance.Client.SessionID, QuartetClient.Instance.Client.Ping)));
                 }));
             }
@@ -173,6 +174,19 @@ namespace GenshinQuartetPlayer2.winforms
             stopButton.Enabled = true;
             readyCheckBox.Enabled = true;
             disconnectButton.Enabled = true;
+        }
+
+        private void trackListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int index = trackListBox.IndexFromPoint(e.X, e.Y);
+                if (index != ListBox.NoMatches)
+                {
+                    Settings.SetUkuleleChordChanell(index);
+                    Console.WriteLine($"chord index {index}");
+                }
+            }
         }
     }
 }

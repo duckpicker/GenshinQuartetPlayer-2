@@ -19,12 +19,12 @@ namespace GenshinQuartetPlayer2
 
         KeyboardEmulator _keyboardEmulator = new KeyboardEmulator();
         private MidiReader _midiReader;
-        private static OutputDevice _outputDevice;
+        private static OutputDevice? _outputDevice;
         public MyPlayback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, MidiReader midiReader)
             : base(timedObjects, tempoMap)
         {
             _midiReader = midiReader;
-            if (OutputDevice == null) _outputDevice = Melanchall.DryWetMidi.Multimedia.OutputDevice.GetByName("Microsoft GS Wavetable Synth");
+            //if (OutputDevice == null) _outputDevice = Melanchall.DryWetMidi.Multimedia.OutputDevice.GetByName("Microsoft GS Wavetable Synth");
         }
         protected override bool TryPlayEvent(MidiEvent midiEvent, object metadata)
         {
@@ -52,7 +52,10 @@ namespace GenshinQuartetPlayer2
                 ScheduleMidiEvent(midiEvent);
             }
 
-            _keyboardEmulator.Emulator(midiEvent);
+            if (Settings.Instrument != Instrument.Ukulele) Settings.UkuleleChordChanell = null;
+            Instrument instrument = Settings.Instrument == Instrument.Ukulele && Settings.UkuleleChordChanell != null && Settings.UkuleleChordChanell == (int)metadata ? Instrument.UkuleleChord : Settings.Instrument;
+
+            _keyboardEmulator.GetInstrumentEmulator(midiEvent, instrument);
 
             return true;
         }
@@ -87,7 +90,7 @@ namespace GenshinQuartetPlayer2
 
         public void DisposeDevice()
         {
-            _outputDevice.Dispose();
+            if (_outputDevice != null) _outputDevice.Dispose();
         }
     }
 }

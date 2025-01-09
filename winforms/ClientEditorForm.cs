@@ -8,6 +8,8 @@ namespace GenshinQuartetPlayer2.winforms
     {
         private ClientEntry _client;
         private ClientNewSettingsEntry _settings;
+
+        private int? _ukuleleChordChanell = null;
         public ClientEditorForm(ClientEntry client)
         {
             InitializeComponent();
@@ -27,7 +29,7 @@ namespace GenshinQuartetPlayer2.winforms
         private void saveButton_Click(object sender, EventArgs e)
         {
             string newJsonSettings = JsonConvert.SerializeObject(new ClientNewSettingsEntry((int)transposition.Value,
-                (Instrument)instrumentComboBox.SelectedIndex, _settings.MutedTrackChunks, (int)pingUpDown.Value, new List<string>()));
+                (Instrument)instrumentComboBox.SelectedIndex, _settings.MutedTrackChunks, (int)pingUpDown.Value, new List<string>(), _ukuleleChordChanell));
             QuartetService.TriggerPrivateMessage(_client.SessionID, newJsonSettings);
             this.Close();
         }
@@ -61,7 +63,7 @@ namespace GenshinQuartetPlayer2.winforms
 
         private void instrumentComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void transposition_ValueChanged(object sender, EventArgs e)
@@ -83,9 +85,22 @@ namespace GenshinQuartetPlayer2.winforms
         private void testPingButton_Click(object sender, EventArgs e)
         {
             string newJsonSettings = JsonConvert.SerializeObject(new ClientNewSettingsEntry((int)transposition.Value,
-                (Instrument)instrumentComboBox.SelectedIndex, _settings.MutedTrackChunks, (int)pingUpDown.Value, new List<string>()));
+                (Instrument)instrumentComboBox.SelectedIndex, _settings.MutedTrackChunks, (int)pingUpDown.Value, new List<string>(), _ukuleleChordChanell));
             QuartetService.TriggerPrivateMessage(_client.SessionID, newJsonSettings);
             QuartetService.TriggerBroadcast(JsonConvert.SerializeObject(new TestNotePlay()));
+        }
+
+        private void trackListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int index = trackListBox.IndexFromPoint(e.X, e.Y);
+                if (index != ListBox.NoMatches)
+                {
+                    _ukuleleChordChanell = index;
+                    Console.WriteLine($"chord index {index}");
+                }
+            }
         }
     }
 }

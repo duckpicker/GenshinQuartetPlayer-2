@@ -12,6 +12,9 @@ namespace GenshinQuartetPlayer2
         LyreZither = 0,
         OldLyre = 1,
         Drum = 2,
-        Waldhorn = 3
+        Waldhorn = 3,
+        Ukulele = 4,
+        JamJamDrum = 5,
+        UkuleleChord = 6
     }
 }

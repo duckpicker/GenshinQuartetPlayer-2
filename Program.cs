@@ -1,3 +1,6 @@
+using WindowsInput.Native;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
+
 namespace GenshinQuartetPlayer2
 {
     internal static class Program
@@ -12,6 +15,8 @@ namespace GenshinQuartetPlayer2
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new MainMenuForm());
+
+            
         }
 
     }

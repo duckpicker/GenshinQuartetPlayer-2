@@ -58,6 +58,7 @@
             trackListBox.Size = new Size(216, 130);
             trackListBox.TabIndex = 21;
             trackListBox.SelectedIndexChanged += trackListBox_SelectedIndexChanged;
+            trackListBox.MouseDown += trackListBox_MouseDown;
             // 
             // transposition
             // 
@@ -72,7 +73,7 @@
             // instrumentComboBox
             // 
             instrumentComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            instrumentComboBox.Items.AddRange(new object[] { "Lyre/Zither", "Old Lyre", "Drum", "Waldhorn" });
+            instrumentComboBox.Items.AddRange(new object[] { "Lyre/Zither", "Old Lyre", "Drum", "Waldhorn", "Ukulele", "Jam Jam" });
             instrumentComboBox.Location = new Point(11, 94);
             instrumentComboBox.Name = "instrumentComboBox";
             instrumentComboBox.Size = new Size(103, 23);

@@ -15,5 +15,8 @@ namespace GenshinQuartetPlayer2
         public static int Port = 8080;
         public static bool BackgroundMidiEvents = false;
         public static bool BackgroundAllMidiEvents = false;
+        public static int? UkuleleChordChanell = null;
+
+        public static void SetUkuleleChordChanell(int chanell) { if (Instrument == Instrument.Ukulele) UkuleleChordChanell = chanell; }
     }
 }

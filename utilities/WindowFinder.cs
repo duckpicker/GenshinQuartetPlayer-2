@@ -12,6 +12,8 @@ namespace GenshinQuartetPlayer2
     {
         public static IntPtr GenshinImpactWindow = FindWindow(null, "Genshin Impact");
         const int SW_MINIMIZE = 6;
+        public const uint WM_KEYDOWN = 0x0100;
+        public const uint WM_KEYUP = 0x0101;
         public static void Find()
         {
             Process[] hWndGenshinImpact = GetProcesses();
@@ -23,7 +25,7 @@ namespace GenshinQuartetPlayer2
             Thread.Sleep(250);
         }
 
-        protected static Process[] GetProcesses()
+        public static Process[] GetProcesses()
         {
             Process[] genshinImpact = Process.GetProcessesByName("GenshinImpact");
             foreach (var proc in genshinImpact) if (proc != null) Console.WriteLine(genshinImpact);
@@ -52,6 +54,12 @@ namespace GenshinQuartetPlayer2
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
     }
 }
