@@ -73,7 +73,7 @@
             // instrumentComboBox
             // 
             instrumentComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            instrumentComboBox.Items.AddRange(new object[] { "Lyre/Zither", "Old Lyre", "Drum", "Waldhorn", "Ukulele", "Jam Jam" });
+            instrumentComboBox.Items.AddRange(new object[] { "Lyre/Zither", "Old Lyre", "Drum", "Waldhorn", "Ukulele", "Jam Jam", "Piano" });
             instrumentComboBox.Location = new Point(11, 79);
             instrumentComboBox.Name = "instrumentComboBox";
             instrumentComboBox.Size = new Size(103, 23);

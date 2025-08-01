@@ -39,9 +39,10 @@ namespace GenshinQuartetPlayer2
                         return;
                     }
                 }
-                else if (instrument == Instrument.Waldhorn && noteToKeyWaldhorn.ContainsKey(transposisionNote) && noteOnEvent.Channel != _drumChanel && Settings.Instrument == Instrument.Waldhorn)
+                else if ((instrument == Instrument.Waldhorn && noteToKeyWaldhorn.ContainsKey(transposisionNote)) || (Settings.Instrument == Instrument.Piano && noteToKeyLyre.ContainsKey(transposisionNote) && noteOnEvent.Channel != _drumChanel))
                 {
-                    _inputSimulator.Keyboard.KeyDown(noteToKeyWaldhorn[transposisionNote]);
+                    if (instrument == Instrument.Waldhorn) _inputSimulator.Keyboard.KeyDown(noteToKeyWaldhorn[transposisionNote]);
+                    if (instrument == Instrument.Piano) _inputSimulator.Keyboard.KeyDown(noteToKeyLyre[transposisionNote]);
                     return;
                 }
                 else if (InstrumentDictionary.ContainsKey(instrument) && noteOnEvent.Channel != _drumChanel) { if (InstrumentDictionary[instrument].ContainsKey(transposisionNote)) _inputSimulator.Keyboard.KeyPress(InstrumentDictionary[instrument][transposisionNote]); }
@@ -51,7 +52,10 @@ namespace GenshinQuartetPlayer2
                 var noteOffEvent = midiEvent as NoteOffEvent;
 
                 var transposisionNote = _transposition.Transpose(noteOffEvent.NoteNumber, Settings.Instrument);
-                if (Settings.Instrument == Instrument.Waldhorn && noteToKeyWaldhorn.ContainsKey(transposisionNote) && noteOffEvent.Channel != _drumChanel) _inputSimulator.Keyboard.KeyUp(noteToKeyWaldhorn[transposisionNote]);
+                if ((Settings.Instrument == Instrument.Waldhorn && noteToKeyWaldhorn.ContainsKey(transposisionNote)) || (Settings.Instrument == Instrument.Piano && noteToKeyLyre.ContainsKey(transposisionNote) && noteOffEvent.Channel != _drumChanel)) {
+                    if (Settings.Instrument == Instrument.Waldhorn) _inputSimulator.Keyboard.KeyUp(noteToKeyWaldhorn[transposisionNote]); 
+                    if (Settings.Instrument == Instrument.Piano) _inputSimulator.Keyboard.KeyUp(noteToKeyLyre[transposisionNote]); 
+                }
             }
         }
 
@@ -89,7 +93,7 @@ namespace GenshinQuartetPlayer2
                     if (note.Channel != _drumChanel)
                     {
                         maximumNotes++;
-                        if (Settings.Instrument == Instrument.LyreZither && noteToKeyLyre.ContainsKey(_transposition.Transpose(note.NoteNumber + i - Settings.Transposition, Instrument.LyreZither))) result++;
+                        if ((Settings.Instrument == Instrument.LyreZither || Settings.Instrument == Instrument.Piano) && noteToKeyLyre.ContainsKey(_transposition.Transpose(note.NoteNumber + i - Settings.Transposition, Instrument.LyreZither))) result++;
                         if (Settings.Instrument == Instrument.OldLyre && noteToKeyOldLyre.ContainsKey(_transposition.Transpose(note.NoteNumber + i - Settings.Transposition, Instrument.OldLyre))) result++;
                         if (Settings.Instrument == Instrument.Waldhorn && noteToKeyWaldhorn.ContainsKey(_transposition.Transpose(note.NoteNumber + i - Settings.Transposition, Instrument.Waldhorn))) result++;
                         if (Settings.Instrument == Instrument.Ukulele && noteToKeyUkulele.ContainsKey(_transposition.Transpose(note.NoteNumber + i - Settings.Transposition, Instrument.Ukulele))) result++;

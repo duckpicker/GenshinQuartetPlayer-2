@@ -15,6 +15,7 @@ namespace GenshinQuartetPlayer2
         Waldhorn = 3,
         Ukulele = 4,
         JamJamDrum = 5,
-        UkuleleChord = 6
+        Piano = 6,
+        UkuleleChord = 7
     }
 }

@@ -55,6 +55,11 @@ namespace GenshinQuartetPlayer2
                             while (note > _rightTopLyreNoteNumber) note -= _octave;
                             return note;
                         }
+                    case Instrument.Piano:
+                        {
+                            while (note > _rightTopLyreNoteNumber) note -= _octave;
+                            return note;
+                        }
                     case Instrument.Ukulele:
                         {
                             while (note > _rightTopUkuleleNoteNumber) note -= _octave;
